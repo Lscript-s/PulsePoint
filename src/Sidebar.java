@@ -13,11 +13,11 @@ public class Sidebar extends PPanel{
     private final PButton btnAboutUs = new PButton("About Us",
             new ImageIcon("src/icons/Icon_AboutUs.png"), 24,24);
 
-    private final PPanel pnlDashboard = new PPanel();
-    private final PPanel pnlExamineeCatalog = new PPanel();
-    private final PPanel pnlAddExaminee = new PPanel();
-    private final PPanel pnlSettings = new PPanel();
-    private final PPanel pnlAboutUs = new PPanel();
+    private final PPanel pnlDashboard = new PPanel(new GridBagLayout());
+    private final PPanel pnlExamineeCatalog = new PPanel(new GridBagLayout());
+    private final PPanel pnlAddExaminee = new PPanel(new GridBagLayout());
+    private final PPanel pnlSettings = new PPanel(new GridBagLayout());
+    private final PPanel pnlAboutUs = new PPanel(new GridBagLayout());
 
     private final Color clrPink = Color.decode("#d7c8c8");
     private final Color clrBlue = Color.decode("#0cc0df");
@@ -50,29 +50,27 @@ public class Sidebar extends PPanel{
 
 
     private void initializeButtons(){
+        gbcCons.setConstraints(-1,-1,1,1,1);
         btnDashboard.setHorizontalAlignment(SwingConstants.LEFT);
         btnDashboard.setHorizontalTextPosition(SwingConstants.RIGHT);
         btnDashboard.setIconTextGap(8);
         btnDashboard.setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN, PLabel.HEADING2));
         btnDashboard.setBackgroundHoverColor(clrBlue);
-        btnDashboard.setRadius(30);
-        pnlDashboard.add(btnDashboard);
+        pnlDashboard.add(btnDashboard, gbcCons);
 
         btnExamineeCatalog.setHorizontalAlignment(SwingConstants.LEFT);
         btnExamineeCatalog.setHorizontalTextPosition(SwingConstants.RIGHT);
         btnExamineeCatalog.setIconTextGap(8);
         btnExamineeCatalog.setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN, PLabel.HEADING2));
         btnExamineeCatalog.setBackgroundHoverColor(clrBlue);
-        btnExamineeCatalog.setRadius(30);
-        pnlExamineeCatalog.add(btnExamineeCatalog);
+        pnlExamineeCatalog.add(btnExamineeCatalog, gbcCons);
 
         btnAddExaminee.setHorizontalAlignment(SwingConstants.LEFT);
         btnAddExaminee.setHorizontalTextPosition(SwingConstants.RIGHT);
         btnAddExaminee.setIconTextGap(8);
         btnAddExaminee.setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN, PLabel.HEADING2));
         btnAddExaminee.setBackgroundHoverColor(clrBlue);
-        btnAddExaminee.setRadius(30);
-        pnlAddExaminee.add(btnAddExaminee);
+        pnlAddExaminee.add(btnAddExaminee, gbcCons);
 
 
         btnSettings.setHorizontalAlignment(SwingConstants.LEFT);
@@ -80,8 +78,7 @@ public class Sidebar extends PPanel{
         btnSettings.setIconTextGap(8);
         btnSettings.setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN, PLabel.HEADING2));
         btnSettings.setBackgroundHoverColor(clrBlue);
-        btnSettings.setRadius(30);
-        pnlSettings.add(btnSettings);
+        pnlSettings.add(btnSettings, gbcCons);
 
 
         btnAboutUs.setHorizontalAlignment(SwingConstants.LEFT);
@@ -89,12 +86,11 @@ public class Sidebar extends PPanel{
         btnAboutUs.setIconTextGap(8);
         btnAboutUs.setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN, PLabel.HEADING2));
         btnAboutUs.setBackgroundHoverColor(clrBlue);
-        btnAboutUs.setRadius(30);
-        pnlAboutUs.add(btnAboutUs);
+        pnlAboutUs.add(btnAboutUs, gbcCons);
     }
 
     private void addComponents(){
-        gbcCons.setConstraints(-1,-1,1,0.2, GridBagConstraints.HORIZONTAL);
+        gbcCons.setConstraints(-1,-1,1,0.1, GridBagConstraints.HORIZONTAL);
         gbcCons.anchor = GridBagConstraints.WEST;
 
         gbcCons.gridy++;
@@ -103,12 +99,14 @@ public class Sidebar extends PPanel{
         add(pnlAddExaminee, gbcCons);
         gbcCons.gridy++;
         add(pnlExamineeCatalog, gbcCons);
+        gbcCons.setConstraints(-1,gbcCons.gridy+1, 1,0.8,GridBagConstraints.VERTICAL);
+        add(Box.createVerticalStrut(100), gbcCons);
+
         gbcCons.gridy++;
+        gbcCons.setConstraints(-1,gbcCons.gridy, 1,0.1,GridBagConstraints.HORIZONTAL);
         add(pnlSettings, gbcCons);
         gbcCons.gridy++;
         add(pnlAboutUs, gbcCons);
-        gbcCons.setConstraints(-1,gbcCons.gridy+1, 1,0.8,GridBagConstraints.VERTICAL);
-        add(Box.createVerticalStrut(100), gbcCons);
     }
 
     // Accessors

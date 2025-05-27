@@ -175,7 +175,6 @@ public class MainWindow {
 
     }
 
-
     private void addDashboard(){
         gbcCons.reset();
         gbcCons.setConstraints(-1,-1,1,1,1);
