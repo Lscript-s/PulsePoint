@@ -1,8 +1,17 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.RingPlot;
+import org.jfree.data.general.DefaultPieDataset;
 
 public class Dashboard extends PPanel {
     private PPanel objBodyPanel;
@@ -21,8 +30,100 @@ public class Dashboard extends PPanel {
     private PLabel lblStudentCount;
     private PLabel lblEntity2Count;
 
+    int intMaleCount = 0;
+    int intFemaleCount = 0;
+    int intEmployeeCount = 0;
+    int intStudentCount = 0;
+    int intExamineeCount = 0;
+
     public Dashboard() {
+        countExamineeSex();
+        countExaminee();
+        countExamineeRole();
         initializeDashboard();
+    }
+
+    private Connection connection;
+    private PreparedStatement statement;
+    private ResultSet result;
+    private void countExamineeSex(){
+        String query = "SELECT sex, COUNT(*) AS count FROM examinee WHERE sex IN ('M', 'F') GROUP BY sex";
+
+        try{
+            connection = DriverManager.getConnection(PulsePointConstants.URL,
+                                                                PulsePointConstants.USERNAME,
+                                                                PulsePointConstants.PASSWORD);
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+
+            while(result.next()) {
+                String sex = result.getString("sex");
+                int count = result.getInt("count");
+                if ("M".equalsIgnoreCase(sex)) {
+                    this.intMaleCount = count;
+                } else if ("F".equalsIgnoreCase(sex)) {
+                    this.intFemaleCount = count;
+                }
+            }
+        }catch(Exception e){
+            System.out.println("Error: " + e);
+        }finally {
+            try{result.close();}catch(Exception ignored){}
+            try{statement.close();}catch(Exception ignored){}
+            try{connection.close();}catch(Exception ignored){}
+        }
+    }
+
+    private void countExaminee(){
+        String query = "SELECT COUNT(*) AS count FROM examinee";
+
+        try{
+            connection = DriverManager.getConnection(PulsePointConstants.URL,
+                    PulsePointConstants.USERNAME,
+                    PulsePointConstants.PASSWORD);
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+
+            while(result.next()) {
+                int count = result.getInt("count");
+                this.intExamineeCount = count;
+            }
+        }catch(Exception e){
+            System.out.println("Error: " + e);
+        }finally {
+            try{result.close();}catch(Exception ignored){}
+            try{statement.close();}catch(Exception ignored){}
+            try{connection.close();}catch(Exception ignored){}
+        }
+
+    }
+
+    private void countExamineeRole(){
+        String query = "SELECT role, COUNT(*) AS count FROM examinee WHERE role IN ('Student', 'Employee') GROUP BY role";
+
+        try{
+            connection = DriverManager.getConnection(PulsePointConstants.URL,
+                    PulsePointConstants.USERNAME,
+                    PulsePointConstants.PASSWORD);
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+
+            while(result.next()) {
+                String role = result.getString("role");
+                int count = result.getInt("count");
+                if ("Student".equalsIgnoreCase(role)) {
+                    this.intStudentCount = count;
+                } else if ("Employee".equalsIgnoreCase(role)) {
+                    this.intEmployeeCount = count;
+                }
+            }
+        }catch(Exception e){
+            System.out.println("Error: " + e);
+        }finally {
+            try{result.close();}catch(Exception ignored){}
+            try{statement.close();}catch(Exception ignored){}
+            try{connection.close();}catch(Exception ignored){}
+        }
     }
 
     private void initializeDashboard() {
@@ -94,25 +195,39 @@ public class Dashboard extends PPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         card.add(topPanel, gbc);
 
-        // Pie chart placeholder
+        // Pie chart
+
+        String[] strAttributeName = new String[2];
+        int[] intAttributeCount = new int[2];
+        if(isExamineesCard) {
+            strAttributeName[0] = "Male";
+            intAttributeCount[0] = intMaleCount;
+            strAttributeName[1] = "Female";
+            intAttributeCount[1] = intFemaleCount;
+        }else{
+            strAttributeName[0] = "Student";
+            intAttributeCount[0] = intStudentCount;
+            strAttributeName[1] = "Female";
+            intAttributeCount[1] = intEmployeeCount;
+        }
+
         PPanel pieChart = new PPanel();
-        pieChart.setPreferredSize(new Dimension(96, 96));
         pieChart.setBackground(new Color(14, 165, 233));
         pieChart.setLayout(new GridBagLayout());
         pieChart.setOpaque(true);
 
-        PLabel lblPie = new PLabel("Pie Chart");
-        lblPie.setForeground(Color.WHITE);
-        lblPie.setFont(new Font("Roboto", Font.PLAIN, 20));
-        pieChart.add(lblPie);
+        PLabel lblPie = createChart(strAttributeName[0], intAttributeCount[0],strAttributeName[1], intAttributeCount[1]);
+        //PLabel lblPie = new PLabel("Test", PLabel.HEADING1);
+        lblPie.setForeground(Color.BLUE);
 
         gbc.gridwidth = 1;
         gbc.weightx = 0;
         gbc.fill = GridBagConstraints.NONE;
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
-        card.add(pieChart, gbc);
+        gbc.anchor = GridBagConstraints.SOUTH;
+        card.add(lblPie, gbc);
+
 
         // Info labels
         PPanel infoPanel = new PPanel();
@@ -121,30 +236,27 @@ public class Dashboard extends PPanel {
 
         if (isExamineesCard) {
             infoPanel.setLayout(new GridLayout(2, 1, 0, 6));
-            lblMaleCount = new PLabel("No. of Male Examinees: --");
+            lblMaleCount = new PLabel("No. of Male Examinees: " + this.intMaleCount);
             lblMaleCount.setFontSize(20);
             infoPanel.add(lblMaleCount);
 
-            lblFemaleCount = new PLabel("No. of Female Examinees: --");
+            lblFemaleCount = new PLabel("No. of Female Examinees: " + this.intFemaleCount);
             lblFemaleCount.setFontSize(20);
             infoPanel.add(lblFemaleCount);
         } else {
             infoPanel.setLayout(new GridLayout(2, 2, 20, 6));
-            lblEmployeeCount = new PLabel("No. of Employees: --");
+            lblEmployeeCount = new PLabel("No. of Employees: " + this.intEmployeeCount);
             lblEmployeeCount.setFontSize(20);
             infoPanel.add(lblEmployeeCount);
 
-            lblEntity1Count = new PLabel("No. of Entity 1: --");
+            lblEntity1Count = new PLabel("No. of Examinees: " + this.intExamineeCount);
             lblEntity1Count.setFontSize(20);
             infoPanel.add(lblEntity1Count);
 
-            lblStudentCount = new PLabel("No. of Students: --");
+            lblStudentCount = new PLabel("No. of Students: " + this.intStudentCount);
             lblStudentCount.setFontSize(20);
             infoPanel.add(lblStudentCount);
 
-            lblEntity2Count = new PLabel("No. of Entity 2: --");
-            lblEntity2Count.setFontSize(20);
-            infoPanel.add(lblEntity2Count);
         }
 
         gbc.gridx = 1;
@@ -217,5 +329,64 @@ public class Dashboard extends PPanel {
 
     public PLabel getLblEntity2Count() {
         return lblEntity2Count;
+    }
+
+    public PLabel createChart(String name1, int count1, String name2, int count2) {
+        // Dataset
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        dataset.setValue(name1, count1);
+        dataset.setValue(name2, count2);
+
+
+        // Chart using RingPlot
+        JFreeChart chart = ChartFactory.createRingChart(
+                "",
+                dataset,
+                true,
+                true,
+                false
+        );
+
+        RingPlot plot = (RingPlot) chart.getPlot();
+        plot.setLabelGenerator(null);
+        plot.setSectionDepth(0.35);
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setOutlineVisible(false);
+        plot.setOutlinePaint(null);
+        // Render chart to BufferedImage
+        int width = 200;
+        int height = 200;
+        BufferedImage chartImage = chart.createBufferedImage(width, height);
+
+        // Create ImageIcon from BufferedImage
+        ImageIcon chartIcon = new ImageIcon(chartImage);
+
+        // Create JLabel with icon
+        PLabel chartLabel = new PLabel(chartIcon);
+        // Add label to JFrame content pane
+        add(chartLabel);
+        return chartLabel;
+    }
+
+    public void refreshCounts() {
+        countExamineeSex();
+        countExaminee();
+        countExamineeRole();
+        removeAll();
+        initializeDashboard();
+
+        revalidate();
+        repaint();
+    }
+
+
+    public static void main(String[] args) {
+        JFrame frm = new JFrame("Dashboard");
+        Dashboard dashboard = new Dashboard();
+        frm.setSize(700,800);
+        frm.setDefaultCloseOperation(3);
+        frm.add(dashboard);
+
+        frm.setVisible(true);
     }
 }

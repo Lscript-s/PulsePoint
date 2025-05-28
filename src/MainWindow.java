@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainWindow {
     JFrame frmMainWindow = new JFrame("PulsePoint");
@@ -10,7 +12,7 @@ public class MainWindow {
     JPanel pnlBody = new JPanel(new GridBagLayout());
     PGridBagConstraints gbcCons = new PGridBagConstraints();
 
-    String strCurrentBodyDisplay = "None";
+    String strCurrentBodyDisplay = "Dashboard";
 
     Header header = new Header();
     Dashboard dashboard = new Dashboard();
@@ -36,13 +38,20 @@ public class MainWindow {
 
         addSidebar();
         setSidebarButton();
-
-
-
-
-        testFunc();
+        setDashboardButton();
+        setBodyPanel();
+//        testFunc();
 
         frmMainWindow.setVisible(true);
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                dashboard.refreshCounts();
+            }
+        }, 0, 20000);
+
     }
 
     private void testFunc(){
@@ -57,6 +66,7 @@ public class MainWindow {
     private void initializeFrame(){
         frmMainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frmMainWindow.setSize(1000,800);
+        frmMainWindow.setMinimumSize(new Dimension(1000,800));
         frmMainWindow.setLayout(new GridBagLayout());
     }
 
@@ -136,7 +146,6 @@ public class MainWindow {
             public void actionPerformed(ActionEvent e) {
                 strCurrentBodyDisplay = "Dashboard";
                 setBodyPanel();
-                sidebar.setFocus(strCurrentBodyDisplay);
             }
         });
         sidebar.getAddExaminee().addActionListener(new ActionListener() {
@@ -144,7 +153,6 @@ public class MainWindow {
             public void actionPerformed(ActionEvent e) {
                 strCurrentBodyDisplay = "Add Examinee";
                 setBodyPanel();
-                sidebar.setFocus(strCurrentBodyDisplay);
             }
         });
         sidebar.getExamineeCatalog().addActionListener(new ActionListener() {
@@ -152,7 +160,6 @@ public class MainWindow {
             public void actionPerformed(ActionEvent e) {
                 strCurrentBodyDisplay = "Examinee Catalog";
                 setBodyPanel();
-                sidebar.setFocus(strCurrentBodyDisplay);
             }
         });
         sidebar.getSettings().addActionListener(new ActionListener() {
@@ -160,7 +167,6 @@ public class MainWindow {
             public void actionPerformed(ActionEvent e) {
                 strCurrentBodyDisplay = "Settings";
                 setBodyPanel();
-                sidebar.setFocus(strCurrentBodyDisplay);
             }
         });
         sidebar.getAboutUs().addActionListener(new ActionListener() {
@@ -168,7 +174,6 @@ public class MainWindow {
             public void actionPerformed(ActionEvent e) {
                 strCurrentBodyDisplay = "About Us";
                 setBodyPanel();
-                sidebar.setFocus(strCurrentBodyDisplay);
             }
         });
 
@@ -178,8 +183,27 @@ public class MainWindow {
     private void addDashboard(){
         gbcCons.reset();
         gbcCons.setConstraints(-1,-1,1,1,1);
+        dashboard.refreshCounts();
         pnlBody.add(dashboard, gbcCons);
         gbcCons.reset();
+    }
+
+    private void setDashboardButton(){
+        dashboard.getAddExamineeButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                strCurrentBodyDisplay = "Add Examinee";
+                setBodyPanel();
+            }
+        });
+
+        dashboard.getViewAllButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                strCurrentBodyDisplay = "Examinee Catalog";
+                setBodyPanel();
+            }
+        });
     }
 
     private void addAddExaminee(){
@@ -200,6 +224,7 @@ public class MainWindow {
 
     // Sets the body panel and changes the appearance of the button
     private void setBodyPanel(){
+        sidebar.setFocus(strCurrentBodyDisplay);
         pnlBody.removeAll();
         if(strCurrentBodyDisplay.equals("Dashboard")){
             addDashboard();
