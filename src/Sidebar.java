@@ -56,6 +56,7 @@ public class Sidebar extends PPanel{
         btnDashboard.setIconTextGap(8);
         btnDashboard.setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN, PLabel.HEADING2));
         btnDashboard.setBackgroundHoverColor(clrBlue);
+        btnDashboard.setBackgroundClickedColor(PulsePointConstants.PINK);
         pnlDashboard.add(btnDashboard, gbcCons);
 
         btnExamineeCatalog.setHorizontalAlignment(SwingConstants.LEFT);
@@ -63,6 +64,7 @@ public class Sidebar extends PPanel{
         btnExamineeCatalog.setIconTextGap(8);
         btnExamineeCatalog.setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN, PLabel.HEADING2));
         btnExamineeCatalog.setBackgroundHoverColor(clrBlue);
+        btnExamineeCatalog.setBackgroundClickedColor(PulsePointConstants.PINK);
         pnlExamineeCatalog.add(btnExamineeCatalog, gbcCons);
 
         btnAddExaminee.setHorizontalAlignment(SwingConstants.LEFT);
@@ -70,6 +72,7 @@ public class Sidebar extends PPanel{
         btnAddExaminee.setIconTextGap(8);
         btnAddExaminee.setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN, PLabel.HEADING2));
         btnAddExaminee.setBackgroundHoverColor(clrBlue);
+        btnAddExaminee.setBackgroundClickedColor(PulsePointConstants.PINK);
         pnlAddExaminee.add(btnAddExaminee, gbcCons);
 
 
@@ -78,6 +81,7 @@ public class Sidebar extends PPanel{
         btnSettings.setIconTextGap(8);
         btnSettings.setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN, PLabel.HEADING2));
         btnSettings.setBackgroundHoverColor(clrBlue);
+        btnSettings.setBackgroundClickedColor(PulsePointConstants.PINK);
         pnlSettings.add(btnSettings, gbcCons);
 
 
@@ -86,6 +90,7 @@ public class Sidebar extends PPanel{
         btnAboutUs.setIconTextGap(8);
         btnAboutUs.setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN, PLabel.HEADING2));
         btnAboutUs.setBackgroundHoverColor(clrBlue);
+        btnAboutUs.setBackgroundClickedColor(PulsePointConstants.PINK);
         pnlAboutUs.add(btnAboutUs, gbcCons);
     }
 
@@ -148,8 +153,6 @@ public class Sidebar extends PPanel{
         this.revalidate();
         this.repaint();
     }
-
-
 
     public static void main(String[] args) {
         JFrame frm = new JFrame("Sidebar");

@@ -359,7 +359,7 @@ class Examinee{
     public Character middle_initial, sex, civil_status;
     public int age, year_of_exam;
     public String division, role, mobile_number, network, address_in_miagao;
-    public String landlord_name, landlord_contact_number, guardian_name, guardian_address, guardian_relation, family_history_illness;
+    public String landlord_name, landlord_contact_number, guardian_name, guardian_address, guardian_relation, guardian_network, family_history_illness;
     private static final Random rand = new Random();
 
     Examinee(){
@@ -383,6 +383,7 @@ class Examinee{
         guardian_name = generate_guardian_name();
         guardian_address = generate_guardian_address(guardian_name);
         guardian_relation = generate_guardian_relation(guardian_name);
+        guardian_network = generate_guardian_network();
         family_history_illness = generate_family_history_illness();
     }
 
@@ -409,7 +410,14 @@ class Examinee{
         System.out.println("Guardian Name: " + (guardian_name != null ? guardian_name : "N/A"));
         System.out.println("Guardian Address: " + (guardian_address != null ? guardian_address : "N/A"));
         System.out.println("Guardian Relation: " + (guardian_relation != null ? guardian_relation : "N/A"));
+        System.out.println("Guardian Network: " + (guardian_network != null ? guardian_network : "N/A"));
         System.out.println("Family History of Illness: " + family_history_illness);
+    }
+
+    private String generate_guardian_network(){
+        if(this.guardian_name == null){return null;}
+
+        return generateString(Constants.NETWORK);
     }
 
 
@@ -595,8 +603,8 @@ public class Prototyping {
                     break;
                 }
 
-                String cols = "examinee_id, year_of_exam, date_of_exam, last_name, first_name, middle_initial, age, sex, birthdate, civil_status, role, mobile_number, network, address_in_miagao, landlord_name, landlord_contact_number, guardian_name, guardian_address, guardian_relation, family_history_illness, division";
-                String query = "INSERT INTO examinee (" + cols + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String cols = "examinee_id, year_of_exam, date_of_exam, last_name, first_name, middle_initial, age, sex, birthdate, civil_status, role, mobile_number, network, address_in_miagao, landlord_name, landlord_contact_number, guardian_name, guardian_address, guardian_relation, family_history_illness, division, guardian_network";
+                String query = "INSERT INTO examinee (" + cols + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement stmnt = conn.prepareStatement(query);
                 stmnt.setString(1, examinee.id);
                 stmnt.setInt(2, examinee.year_of_exam);
@@ -671,6 +679,11 @@ public class Prototyping {
                 }
                 stmnt.setString(21, examinee.division);
 
+                if (examinee.guardian_network == null) {
+                    stmnt.setNull(22, java.sql.Types.VARCHAR);
+                } else {
+                    stmnt.setString(22, examinee.guardian_network);
+                }
 
                 // Execute the insert
                 int rowsAffected = stmnt.executeUpdate();

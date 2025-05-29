@@ -22,6 +22,52 @@ public class PTextField extends JTextField {
         setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN,PLabel.HEADING3));
     }
 
+    PTextField(int columns, int radius) {
+        super(columns);
+        setBorder(null);
+        setOpaque(false);
+        setRadius(radius);
+        setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN,PLabel.HEADING3));
+    }
+
+    PTextField(int columns, int radius, Color borderColor) {
+        super(columns);
+        setBorder(null);
+        setOpaque(false);
+        setRadius(radius);
+        setBorderColor(borderColor);
+        setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN,PLabel.HEADING3));
+    }
+
+    PTextField(String placeholder, int radius, Color borderColor) {
+        super();
+        setPlaceholder(placeholder);
+        setBorder(null);
+        setOpaque(false);
+        setRadius(radius);
+        setBorderColor(borderColor);
+        setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN,PLabel.HEADING3));
+    }
+
+    PTextField(String placeholder, int radius) {
+        super();
+        setPlaceholder(placeholder);
+        setBorder(null);
+        setOpaque(false);
+        setRadius(radius);
+        setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN,PLabel.HEADING3));
+    }
+
+    PTextField(String placeholder) {
+        super();
+        setPlaceholder(placeholder);
+        setBorder(null);
+        setOpaque(false);
+        setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN,PLabel.HEADING3));
+    }
+
+
+
     @Override
     public Insets getInsets() {
         return padding;

@@ -17,6 +17,7 @@ public class MainWindow {
     Header header = new Header();
     Dashboard dashboard = new Dashboard();
     Sidebar sidebar = new Sidebar();
+    AddExamineeForm addExamineeForm = new AddExamineeForm();
 
     MainWindow(){
         initializeFrame();
@@ -31,27 +32,16 @@ public class MainWindow {
         pnlBody.setOpaque(true);
         addPanels();
 
-        addBodyFiller();
-
         addHeader();
-        setHeaderButtons();
-
         addSidebar();
-        setSidebarButton();
-        setDashboardButton();
         setBodyPanel();
-//        testFunc();
+
 
         frmMainWindow.setVisible(true);
 
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                dashboard.refreshCounts();
-            }
-        }, 0, 20000);
-
+        setHeaderButtons();
+        setSidebarButton();
+        setDashboardButton();
     }
 
     private void testFunc(){
@@ -65,8 +55,8 @@ public class MainWindow {
 
     private void initializeFrame(){
         frmMainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frmMainWindow.setSize(1000,800);
-        frmMainWindow.setMinimumSize(new Dimension(1000,800));
+        frmMainWindow.setSize(1140,720);
+        frmMainWindow.setMinimumSize(new Dimension(1080,720));
         frmMainWindow.setLayout(new GridBagLayout());
     }
 
@@ -113,6 +103,7 @@ public class MainWindow {
         header.getLogoutButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("Hi");
             }
         });
 
@@ -188,10 +179,13 @@ public class MainWindow {
         gbcCons.reset();
     }
 
+
     private void setDashboardButton(){
+        System.out.println("Dashboard Button Set");
         dashboard.getAddExamineeButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("Hi");
                 strCurrentBodyDisplay = "Add Examinee";
                 setBodyPanel();
             }
@@ -207,7 +201,10 @@ public class MainWindow {
     }
 
     private void addAddExaminee(){
-        pnlBody.add(new PLabel("Add Examinee", PLabel.HEADING1));
+        gbcCons.reset();
+        gbcCons.setConstraints(-1,-1,1,1,1);
+        pnlBody.add(addExamineeForm.getScrollPane(), gbcCons);
+        gbcCons.reset();
     }
 
     private void addSettings(){

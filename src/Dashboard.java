@@ -17,8 +17,8 @@ public class Dashboard extends PPanel {
     private PPanel objBodyPanel;
 
     // Interactable components
-    private PButton btnAddExaminee;
-    private PButton btnViewAll;
+    private PButton btnAddExaminee = new PButton("Add Examinee +");
+    private PButton btnViewAll = new PButton("View All >");
 
     // Labels for Examinees
     private PLabel lblMaleCount;
@@ -128,7 +128,8 @@ public class Dashboard extends PPanel {
 
     private void initializeDashboard() {
         setLayout(new GridBagLayout());
-        setBackground(Color.WHITE);
+        setPadding(10,10,10,10);
+        setBackground(PulsePointConstants.WHITE);
 
         PGridBagConstraints gbc = new PGridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
@@ -163,6 +164,7 @@ public class Dashboard extends PPanel {
 
     private PPanel createCardPanel(String title, boolean isExamineesCard) {
         PPanel card = new PPanel(new GridBagLayout());
+        card.setPadding(5,5,5,5);
         card.setBackground(Color.WHITE);
         card.setBorder(new LineBorder(new Color(243, 243, 243), 1, true));
 
@@ -182,8 +184,10 @@ public class Dashboard extends PPanel {
         if (isExamineesCard) {
             PPanel addPanel = new PPanel(new FlowLayout(FlowLayout.RIGHT, 4, 0));
             addPanel.setBackground(Color.WHITE);
-            btnAddExaminee = createButton("Add Examinee +");
-            btnAddExaminee.addActionListener(e -> System.out.println("Add Examinee button clicked"));
+            btnAddExaminee.setForeground(new Color(14, 165, 233));
+            btnAddExaminee.setBorderPainted(false);
+            btnAddExaminee.setContentAreaFilled(false);
+            btnAddExaminee.setFocusPainted(false);
             addPanel.add(btnAddExaminee);
             topPanel.add(addPanel, BorderLayout.EAST);
         }
@@ -207,7 +211,7 @@ public class Dashboard extends PPanel {
         }else{
             strAttributeName[0] = "Student";
             intAttributeCount[0] = intStudentCount;
-            strAttributeName[1] = "Female";
+            strAttributeName[1] = "Employee";
             intAttributeCount[1] = intEmployeeCount;
         }
 
@@ -270,10 +274,11 @@ public class Dashboard extends PPanel {
             PPanel viewAllPanel = new PPanel(new FlowLayout(FlowLayout.RIGHT, 4, 0));
             viewAllPanel.setBackground(Color.WHITE);
 
-            btnViewAll = createButton("View all >");
-            btnViewAll.addActionListener(e -> System.out.println("View All button clicked"));
+            btnViewAll.setForeground(new Color(14, 165, 233));
+            btnViewAll.setBorderPainted(false);
+            btnViewAll.setContentAreaFilled(false);
+            btnViewAll.setFocusPainted(false);
             viewAllPanel.add(btnViewAll);
-
             gbc.gridx = 2;
             gbc.gridy = 1;
             gbc.weightx = 0;
@@ -287,7 +292,6 @@ public class Dashboard extends PPanel {
 
     private PButton createButton(String text) {
         PButton button = new PButton(text);
-        // RIP SET FONT
         button.setForeground(new Color(14, 165, 233));
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
@@ -354,8 +358,8 @@ public class Dashboard extends PPanel {
         plot.setOutlineVisible(false);
         plot.setOutlinePaint(null);
         // Render chart to BufferedImage
-        int width = 200;
-        int height = 200;
+        int width = 150;
+        int height = 150;
         BufferedImage chartImage = chart.createBufferedImage(width, height);
 
         // Create ImageIcon from BufferedImage
