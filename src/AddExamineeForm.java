@@ -7,10 +7,19 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 class ImmunizationFields{
+    public final boolean isOthers;
     private final PCheckBox chkVaccineName;
     private final PTextField txtfldDateGiven, txtfldDose, txtfldRemarks;
+    private PTextField txtfldOthers;
     ImmunizationFields(String name){
         chkVaccineName = new PCheckBox(name);
+        if(name.equals("Others")){
+            chkVaccineName.setText("");
+            isOthers = true;
+            txtfldOthers = new PTextField("Others", 30, PulsePointConstants.GRAY);
+        }else {
+            isOthers = false;
+        }
         txtfldDateGiven = new PTextField("Date Given", 30, PulsePointConstants.GRAY);
         txtfldDose = new PTextField("DOSE Include Quantity", 30, PulsePointConstants.GRAY);
         txtfldRemarks = new PTextField("Remarks", 30, PulsePointConstants.GRAY);
@@ -19,12 +28,23 @@ class ImmunizationFields{
     public String getDateGiven(){return txtfldDateGiven.getText();}
     public String getDose(){return txtfldDose.getText();}
     public String getRemarks(){return txtfldRemarks.getText();}
+    public String getOtherName(){return txtfldOthers.getText();}
 
     public PCheckBox getChkVaccineName(){return chkVaccineName;}
     public PTextField getTxtfldDateGiven(){return txtfldDateGiven;}
     public PTextField getTxtfldDose(){return txtfldDose;}
     public PTextField getTxtfldRemarks(){return txtfldRemarks;}
+    public PTextField getTxtfldOthers(){return txtfldOthers;}
+}
 
+class Immunization{
+    public final String strName, strDate, strDose, strRemarks;
+    Immunization(String strName, String strDate, String strDose, String strRemarks){
+        this.strName = strName;
+        this.strDate = strDate;
+        this.strDose = strDose;
+        this.strRemarks = strRemarks;
+    }
 }
 
 class MedicalConditionFields{
@@ -376,6 +396,30 @@ public class AddExamineeForm extends PScrollPanel{
         gbcCons.gridwidth = 1;
 
         for(int intIndex = 0; intIndex<objImmunizations.length; intIndex++){
+            if(intIndex == objImmunizations.length-1){
+                //Others
+                JPanel pnlOthers = new JPanel();
+                pnlOthers.setBackground(null);
+                pnlOthers.setLayout(new GridBagLayout());
+
+                PGridBagConstraints gbc = new PGridBagConstraints();
+                gbc.setConstraints(-1,-1,0,1,0);
+                pnlOthers.add(objImmunizations[intIndex].getChkVaccineName(), gbc);
+                gbc.setConstraints(-1,-1,1,1,2);
+                pnlOthers.add(objImmunizations[intIndex].getTxtfldOthers(), gbc);
+
+                gbcCons.setConstraints(-1,gbcCons.gridy, 0,0, GridBagConstraints.HORIZONTAL);
+                pnlImmunization.add(pnlOthers, gbcCons);
+                gbcCons.setConstraints(-1,gbcCons.gridy, 0.1,0, GridBagConstraints.HORIZONTAL);
+
+                pnlImmunization.add(objImmunizations[intIndex].getTxtfldDateGiven(), gbcCons);
+                pnlImmunization.add(objImmunizations[intIndex].getTxtfldDose(), gbcCons);
+                gbcCons.setConstraints(-1,gbcCons.gridy, 1,0, GridBagConstraints.HORIZONTAL);
+                pnlImmunization.add(objImmunizations[intIndex].getTxtfldRemarks(), gbcCons);
+                gbcCons.gridy++;
+                continue;
+            }
+
             gbcCons.setConstraints(-1,gbcCons.gridy, 0,0, GridBagConstraints.HORIZONTAL);
             pnlImmunization.add(objImmunizations[intIndex].getChkVaccineName(), gbcCons);
             gbcCons.setConstraints(-1,gbcCons.gridy, 0.1,0, GridBagConstraints.HORIZONTAL);
@@ -444,10 +488,46 @@ public class AddExamineeForm extends PScrollPanel{
                 arrExamineeConditions.add(new MedicalCondition(objMedicalConditions[intIndex].getName(), objMedicalConditions[intIndex].getDate(), objMedicalConditions[intIndex].getMaintenance()));
             }
         }
-        
 
+        // Immunizations
+        ArrayList<Immunization> arrExamineeImmunizations = new ArrayList<>();
+        for(ImmunizationFields objImmField : objImmunizations){
+            if(objImmField.getChkVaccineName().isSelected() && objImmField.isOthers){
+                if(objImmField.getOtherName().isEmpty()){
+                    //Throw an error
+                    continue;
+                }
+                if(objImmField.getDateGiven().isEmpty()){
+                    //Throw an error
+                    continue;
+                }
+                if(objImmField.getDose().isEmpty()){
+                    //Throw an error
+                    continue;
+                }
+                arrExamineeImmunizations.add(new Immunization(objImmField.getTxtfldOthers().getText(), objImmField.getDateGiven(), objImmField.getDose(), objImmField.getRemarks()));
+                continue;
+            }
 
-        System.out.println(strFamilyIllness);
+            if(objImmField.getChkVaccineName().isSelected()){
+                if(objImmField.getDateGiven().isEmpty()){
+                    //Throw an error
+                    continue;
+                }
+                if(objImmField.getDose().isEmpty()){
+                    //Throw an error
+                    continue;
+                }
+                arrExamineeImmunizations.add(new Immunization(objImmField.getChkVaccineName().getText(), objImmField.getDateGiven(), objImmField.getDose(), objImmField.getRemarks()));
+            }
+        }
+
+        for(Immunization imm: arrExamineeImmunizations){
+            System.out.println(imm.strName);
+            System.out.println(imm.strDate);
+            System.out.println(imm.strDose);
+            System.out.println(imm.strRemarks);
+        }
     }
 
     private String getFamilyIlnesses(){
@@ -497,7 +577,6 @@ public class AddExamineeForm extends PScrollPanel{
         pnl.setBorderThickness(3);
         return pnl;
     }
-
 
     public static void main(String[] args){
         JFrame frm = new JFrame();
