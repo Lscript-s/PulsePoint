@@ -2,10 +2,265 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+class Examinee {
+    private String strId;
+    private LocalDate objExamDate;
+    private int intExamYear;
+    private String strFirstName;
+    private String strLastName;
+    private String strMiddleInitial;
+    private int intAge;
+    private String strSex;
+    private String strRole;
+    private String strCivilStatus;
+    private LocalDate objBirthdate;
+    private String strMobileNumber;
+    private String strNetwork;
+    private String strDivision;
+
+    // Dorm Info
+    private String strAddress;
+    private String strLandlordName;
+    private String strLandlordContact;
+
+    // Guardian Info
+    private String strGuardianName;
+    private String strGuardianRelation;
+    private String strGuardianAddress;
+    private String strGuardianContact;
+    private String strGuardianNetwork;
+
+    // Family Illness
+    private String strFamilyIllness;
+
+    // Lists
+    private ArrayList<MedicalCondition> arrMedicalConditions;
+    private ArrayList<Immunization> arrImmunizations;
+
+    private Connection conn;
+    private PreparedStatement stmnt;
+
+    public Examinee(
+            String strId,
+            LocalDate objExamDate,
+            int intExamYear,
+            String strFirstName,
+            String strLastName,
+            String strMiddleInitial,
+            int intAge,
+            String strSex,
+            String strRole,
+            String strCivilStatus,
+            LocalDate objBirthdate,
+            String strMobileNumber,
+            String strNetwork,
+            String strDivision,
+            String strAddress,
+            String strLandlordName,
+            String strLandlordContact,
+            String strGuardianName,
+            String strGuardianRelation,
+            String strGuardianAddress,
+            String strGuardianContact,
+            String strGuardianNetwork,
+            String strFamilyIllness,
+            ArrayList<MedicalCondition> arrMedicalConditions,
+            ArrayList<Immunization> arrImmunizations
+    ) {
+        this.strId = strId;
+        this.objExamDate = objExamDate;
+        this.intExamYear = intExamYear;
+        this.strFirstName = strFirstName;
+        this.strLastName = strLastName;
+        this.strMiddleInitial = strMiddleInitial;
+        this.intAge = intAge;
+        this.strSex = strSex;
+        this.strRole = strRole;
+        this.strCivilStatus = strCivilStatus;
+        this.objBirthdate = objBirthdate;
+        this.strMobileNumber = strMobileNumber;
+        this.strNetwork = strNetwork;
+        this.strDivision = strDivision;
+        this.strAddress = strAddress;
+        this.strLandlordName = strLandlordName;
+        this.strLandlordContact = strLandlordContact;
+        this.strGuardianName = strGuardianName;
+        this.strGuardianRelation = strGuardianRelation;
+        this.strGuardianAddress = strGuardianAddress;
+        this.strGuardianContact = strGuardianContact;
+        this.strGuardianNetwork = strGuardianNetwork;
+        this.strFamilyIllness = strFamilyIllness;
+        this.arrMedicalConditions = arrMedicalConditions;
+        this.arrImmunizations = arrImmunizations;
+    }
+
+    public boolean addBasicInfoToDB() {
+        try {
+            conn = DriverManager.getConnection(PulsePointConstants.URL,
+                    PulsePointConstants.USERNAME,
+                    PulsePointConstants.PASSWORD);
+
+            String strColumns = "(examinee_id, year_of_exam, date_of_exam, last_name, first_name, " +
+                    "middle_initial, age, sex, birthdate, civil_status, division, role, mobile_number, " +
+                    "network, address_in_miagao, landlord_name, landlord_contact_number, guardian_name, " +
+                    "guardian_address, guardian_relation, guardian_mobile_number, guardian_network, " +
+                    "family_history_illness)";
+            String strStatement = "INSERT INTO examinee " + strColumns + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            stmnt = conn.prepareStatement(strStatement);
+
+            stmnt.setString(1, this.strId);
+            stmnt.setInt(2, this.intExamYear);
+            stmnt.setDate(3, Date.valueOf(this.objExamDate));
+            stmnt.setString(4, this.strLastName);
+            stmnt.setString(5, this.strFirstName);
+            stmnt.setString(6, this.strMiddleInitial);
+
+            if (this.intAge != 0) {
+                stmnt.setInt(7, this.intAge);
+            } else {
+                stmnt.setNull(7, Types.INTEGER);
+            }
+
+            stmnt.setString(8, this.strSex);
+            stmnt.setDate(9, Date.valueOf(this.objBirthdate));
+            stmnt.setString(10, this.strCivilStatus);
+            stmnt.setString(11, this.strDivision);
+            stmnt.setString(12, this.strRole);
+            stmnt.setString(13, this.strMobileNumber);
+            stmnt.setString(14, this.strNetwork);
+
+            if (this.strAddress != null) {
+                stmnt.setString(15, this.strAddress);
+                stmnt.setString(16, this.strLandlordName);
+                stmnt.setString(17, this.strLandlordContact);
+            } else {
+                stmnt.setNull(15, Types.VARCHAR);
+                stmnt.setNull(16, Types.VARCHAR);
+                stmnt.setNull(17, Types.VARCHAR);
+            }
+
+            if (this.strGuardianName != null) {
+                stmnt.setString(18, this.strGuardianName);
+                stmnt.setString(19, this.strGuardianAddress);
+                stmnt.setString(20, this.strGuardianRelation);
+                stmnt.setString(21, this.strGuardianContact);
+                stmnt.setString(22, this.strGuardianNetwork);
+            } else {
+                stmnt.setNull(18, Types.VARCHAR);
+                stmnt.setNull(19, Types.VARCHAR);
+                stmnt.setNull(20, Types.VARCHAR);
+                stmnt.setNull(21, Types.VARCHAR);
+                stmnt.setNull(22, Types.VARCHAR);
+            }
+
+            if (this.strFamilyIllness != null) {
+                stmnt.setString(23, this.strFamilyIllness);
+            } else {
+                stmnt.setNull(23, Types.VARCHAR); // Fixed from 24 → 23
+            }
+
+            int intRowsAffected = stmnt.executeUpdate();
+
+            System.out.println(intRowsAffected + " Rows Affected");
+            return true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Failed to insert examinee records:\n" + e.getMessage(),
+                    "Database Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        } finally {
+            try { stmnt.close(); } catch (Exception ignored) {}
+            try { conn.close(); } catch (Exception ignored) {}
+        }
+    }
+
+    public boolean addMedicalConditionsToDB() {
+        try {
+            conn = DriverManager.getConnection(PulsePointConstants.URL,
+                    PulsePointConstants.USERNAME,
+                    PulsePointConstants.PASSWORD);
+
+            String sql = "INSERT INTO current_medical_condition " +
+                    "(examinee_id, medical_condition, condition_identified_on, maintenance_medication) " +
+                    "VALUES (?, ?, ?, ?)";
+
+            stmnt = conn.prepareStatement(sql);
+
+            for (MedicalCondition condition : arrMedicalConditions) {
+                stmnt.setString(1, this.strId);
+                stmnt.setString(2, condition.name);
+
+                if (condition.date != null && !condition.date.isEmpty()) {
+                    stmnt.setDate(3, Date.valueOf(condition.date));
+                } else {
+                    stmnt.setNull(3, Types.DATE);
+                }
+
+                stmnt.setString(4, condition.maintenance);
+
+                stmnt.executeUpdate();
+            }
+            return true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Failed to insert medical conditions:\n" + e.getMessage(),
+                    "Database Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        } finally {
+            try { stmnt.close(); } catch (Exception ignored) {}
+            try { conn.close(); } catch (Exception ignored) {}
+        }
+    }
+
+    public boolean addImmunizationsToDB() {
+        try {
+            conn = DriverManager.getConnection(PulsePointConstants.URL,
+                    PulsePointConstants.USERNAME,
+                    PulsePointConstants.PASSWORD);
+
+            String sql = "INSERT INTO immunization_background " +
+                    "(examinee_id, vaccine_name, vaccine_given_date, vaccine_dose, vaccine_remarks) " +
+                    "VALUES (?, ?, ?, ?, ?)";
+
+            stmnt = conn.prepareStatement(sql);
+
+            for (Immunization vaccine : arrImmunizations) {
+                stmnt.setString(1, this.strId);
+                stmnt.setString(2, vaccine.strName);
+
+                if (vaccine.strDate != null && !vaccine.strDate.isEmpty()) {
+                    stmnt.setDate(3, Date.valueOf(vaccine.strDate));
+                } else {
+                    stmnt.setNull(3, Types.DATE);
+                }
+
+                stmnt.setString(4, vaccine.strDose);
+                stmnt.setString(5, vaccine.strRemarks);
+
+                stmnt.executeUpdate();
+            }
+            return true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Failed to insert immunization records:\n" + e.getMessage(),
+                    "Database Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        } finally {
+            try { stmnt.close(); } catch (Exception ignored) {}
+            try { conn.close(); } catch (Exception ignored) {}
+        }
+    }
+}
 class ImmunizationFields{
     public final boolean isOthers;
     private final PCheckBox chkVaccineName;
@@ -82,7 +337,6 @@ class MedicalConditionFields{
     public PTextField getTxtfldMaintenance(){
         return txtfldMaintenance;
     }
-
 }
 
 class MedicalCondition{
@@ -106,6 +360,7 @@ public class AddExamineeForm extends PScrollPanel{
     private final PTextField txtfldLastName = new PTextField("Last Name", 30, PulsePointConstants.GRAY);
     private final PTextField txtfldMiddleInitial = new PTextField("Middle Initial", 30, PulsePointConstants.GRAY);
     private final PTextField txtfldDateExam = new PTextField("Exam Date(YYYY-MM-DD)", 30, PulsePointConstants.GRAY);
+    private final PTextField txtfldYearExam = new PTextField("Year of Exam(YYYY)", 30, PulsePointConstants.GRAY);
     private final PTextField txtfldAge = new PTextField("Age", 30, PulsePointConstants.GRAY);
 
     private final PLabel lblSex = new PLabel("Sex");
@@ -135,9 +390,13 @@ public class AddExamineeForm extends PScrollPanel{
     // Additional Information
     private final PTextField txtfldMobileNumber = new PTextField("Mobile Number", 30, PulsePointConstants.GRAY);
     private final PTextField txtfldNetwork = new PTextField("Network", 30, PulsePointConstants.GRAY);
+
+    private final PCheckBox chkDormInformation = new PCheckBox("Dorm Information (If Applicable)", PulsePointConstants.HEADING2);
     private final PTextField txtfldAddress = new PTextField("Address in Miagao", 30, PulsePointConstants.GRAY);
     private final PTextField txtfldLandlordName = new PTextField("Landlord's Name", 30, PulsePointConstants.GRAY);
     private final PTextField txtfldLandlordContact = new PTextField("Landlord's Contact Number", 30, PulsePointConstants.GRAY);
+
+    private final PCheckBox chkGuardianInformation = new PCheckBox("Guardian Information (If Parents are not available)", PulsePointConstants.HEADING2);
     private final PTextField txtfldGuardianName = new PTextField("Guardian's Name", 30, PulsePointConstants.GRAY);
     private final PTextField txtfldGuardianContact = new PTextField("Guardian's Contact Number", 30, PulsePointConstants.GRAY);
     private final PTextField txtfldGuardianNetwork = new PTextField("Guardian's Network", 30, PulsePointConstants.GRAY);
@@ -168,6 +427,7 @@ public class AddExamineeForm extends PScrollPanel{
 
     private final PButton btnAddExaminee = new PButton("Add Examinee to Database");
 
+
     AddExamineeForm(){
         setBackground(PulsePointConstants.WHITE);
         setPadding(new Insets(10,10,10,10));
@@ -183,7 +443,7 @@ public class AddExamineeForm extends PScrollPanel{
 
     private void addBasicInfoFields(){
         PPanel pnlBasicInfo = createFieldGroupPanel();
-        // id, date of exam
+        // id, date of exam, year
         // last, first, middle
         // age, sex, role, civil status
         // birthdate, division, mobile number, network
@@ -202,7 +462,9 @@ public class AddExamineeForm extends PScrollPanel{
         gbcCons.gridy++;
         gbcCons.gridwidth = 2;
         pnlBasicInfo.add(txtfldExamineeId, gbcCons);
+        gbcCons.gridwidth = 1;
         pnlBasicInfo.add(txtfldDateExam, gbcCons);
+        pnlBasicInfo.add(txtfldYearExam, gbcCons);
 
         // Row 2
         gbcCons.gridwidth = 1;
@@ -279,49 +541,85 @@ public class AddExamineeForm extends PScrollPanel{
         append(pnlBasicInfo);
     }
 
+    private final PPanel pnlGuardianInfo = createFieldGroupPanel();
     private void addGuardianInfoFields(){
         //Guardian Name, Relation
         //Guardian Number, Network, Address
 
         gbcCons.reset();
         gbcCons.setConstraints(-1,0,1,0,GridBagConstraints.HORIZONTAL);
-        PPanel pnlGuardianInfo = createFieldGroupPanel();
+        gbcCons.gridwidth = 2;
 
-        PLabel lblGuardianInfo = new PLabel("Guardian Information (If Parents are not available)", PLabel.HEADING2);
-        gbcCons.gridwidth = 2;
-        pnlGuardianInfo.add(lblGuardianInfo, gbcCons);
-        gbcCons.gridy++;
-        gbcCons.gridwidth = 1;
-        pnlGuardianInfo.add(txtfldGuardianName, gbcCons);
-        pnlGuardianInfo.add(txtfldGuardianRelation, gbcCons);
-        gbcCons.gridy++;
-        gbcCons.gridwidth = 2;
-        pnlGuardianInfo.add(txtfldGuardianAddress, gbcCons);
-        gbcCons.gridy++;
-        gbcCons.gridwidth = 1;
-        pnlGuardianInfo.add(txtfldGuardianContact, gbcCons);
-        pnlGuardianInfo.add(txtfldGuardianNetwork, gbcCons);
+        chkGuardianInformation.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(chkGuardianInformation.isSelected()){
+                    gbcCons.gridy++;
+                    gbcCons.gridwidth = 1;
+                    pnlGuardianInfo.add(txtfldGuardianName, gbcCons);
+                    pnlGuardianInfo.add(txtfldGuardianRelation, gbcCons);
+                    gbcCons.gridy++;
+                    gbcCons.gridwidth = 2;
+                    pnlGuardianInfo.add(txtfldGuardianAddress, gbcCons);
+                    gbcCons.gridy++;
+                    gbcCons.gridwidth = 1;
+                    pnlGuardianInfo.add(txtfldGuardianContact, gbcCons);
+                    pnlGuardianInfo.add(txtfldGuardianNetwork, gbcCons);
+
+                    revalidate();
+                    repaint();
+                }else{
+                    pnlGuardianInfo.removeAll();
+                    gbcCons.reset();
+                    gbcCons.setConstraints(-1,0,1,0,GridBagConstraints.HORIZONTAL);
+                    gbcCons.gridwidth = 2;
+                    pnlGuardianInfo.add(chkGuardianInformation, gbcCons);
+
+                    revalidate();
+                    repaint();
+                }
+            }
+        });
+        pnlGuardianInfo.add(chkGuardianInformation, gbcCons);
 
         append(pnlGuardianInfo);
     }
 
+    private final PPanel pnlDormInfo = createFieldGroupPanel();
     private void addDormInfoFields(){
         // Address in miagao
         // Landlord name, contact
-        PPanel pnlDormInfo = createFieldGroupPanel();
-        PLabel lblDormInfo = new PLabel("Dorm Information", PLabel.HEADING2);
 
         gbcCons.reset();
         gbcCons.setConstraints(-1,0,1,0,GridBagConstraints.HORIZONTAL);
         gbcCons.gridwidth = 2;
-        pnlDormInfo.add(lblDormInfo, gbcCons);
-        gbcCons.gridy++;
-        pnlDormInfo.add(txtfldAddress, gbcCons);
-        gbcCons.gridwidth = 1;
-        gbcCons.gridy++;
-        pnlDormInfo.add(txtfldLandlordName, gbcCons);
-        pnlDormInfo.add(txtfldLandlordContact, gbcCons);
 
+        chkDormInformation.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(chkDormInformation.isSelected()){
+                    gbcCons.gridy++;
+                    pnlDormInfo.add(txtfldAddress, gbcCons);
+                    gbcCons.gridwidth = 1;
+                    gbcCons.gridy++;
+                    pnlDormInfo.add(txtfldLandlordName, gbcCons);
+                    pnlDormInfo.add(txtfldLandlordContact, gbcCons);
+
+                    repaint();
+                    revalidate();
+                }else{
+                    pnlDormInfo.removeAll();
+                    gbcCons.reset();
+                    gbcCons.setConstraints(-1,0,1,0,GridBagConstraints.HORIZONTAL);
+                    gbcCons.gridwidth = 2;
+                    pnlDormInfo.add(chkDormInformation, gbcCons);
+
+                    revalidate();
+                    repaint();
+                }
+            }
+        });
+        pnlDormInfo.add(chkDormInformation, gbcCons);
         append(pnlDormInfo);
     }
 
@@ -332,7 +630,7 @@ public class AddExamineeForm extends PScrollPanel{
         gbcCons.reset();
         gbcCons.setConstraints(-1,0,1,0,GridBagConstraints.HORIZONTAL);
         gbcCons.gridwidth = 4;
-        pnlFamilyIllness.add(lblFamilyIllness);
+        pnlFamilyIllness.add(lblFamilyIllness, gbcCons);
         gbcCons.gridwidth = 1;
         gbcCons.gridy++;
         pnlFamilyIllness.add(chkHypertension,gbcCons);
@@ -438,46 +736,249 @@ public class AddExamineeForm extends PScrollPanel{
         btnAddExaminee.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addToDatabase();
+                Examinee examinee = extractInfo();
+                if(examinee != null) {
+                    if(!examinee.addBasicInfoToDB()){
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Error adding basic Information",
+                                "Insert Failed",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                        return;
+                    }
+
+                    if(!examinee.addMedicalConditionsToDB()){
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Error adding medical conditions to database",
+                                "Insert Failed",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                        return;
+                    }
+
+                    if(!examinee.addImmunizationsToDB()){
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Error adding immunizations to database",
+                                "Insert Failed",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                        return;
+                    }
+
+                    resetFormFields();
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Successfully added to database",
+                            "Insert Success",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                }
             }
         });
         append(btnAddExaminee);
     }
 
-    private void addToDatabase(){
-        // Basic info
+    private void resetFormFields() {
+        // Clear all text fields
+        txtfldExamineeId.setText("");
+        txtfldFirstName.setText("");
+        txtfldLastName.setText("");
+        txtfldMiddleInitial.setText("");
+        txtfldDateExam.setText("");
+        txtfldYearExam.setText("");
+        txtfldAge.setText("");
+        txtfldBirthdate.setText("");
+        txtfldDivision.setText("");
+        txtfldMobileNumber.setText("");
+        txtfldNetwork.setText("");
+        txtfldAddress.setText("");
+        txtfldLandlordName.setText("");
+        txtfldLandlordContact.setText("");
+        txtfldGuardianName.setText("");
+        txtfldGuardianContact.setText("");
+        txtfldGuardianNetwork.setText("");
+        txtfldGuardianRelation.setText("");
+        txtfldGuardianAddress.setText("");
+        txtfldFamilyIllnessOthers.setText("");
+
+        // Deselect radio buttons via ButtonGroups
+        bgSex.clearSelection();
+        bgCivilStatus.clearSelection();
+        bgRole.clearSelection();
+
+        // Uncheck all checkboxes
+        chkDormInformation.setSelected(false);
+        chkGuardianInformation.setSelected(false);
+        chkHypertension.setSelected(false);
+        chkTuberculosis.setSelected(false);
+        chkBAsthma.setSelected(false);
+        chkCancer.setSelected(false);
+        chkDiabetes.setSelected(false);
+        chkHepatitis.setSelected(false);
+        chkHeartDisease.setSelected(false);
+        chkAllergies.setSelected(false);
+        chkOthers.setSelected(false);
+    }
+
+    private Examinee extractInfo(){
+        PTextField[] objRequiredFields = {txtfldExamineeId, txtfldDateExam, txtfldYearExam, txtfldLastName, txtfldFirstName,
+                                        txtfldAge, txtfldBirthdate, txtfldDivision, txtfldMobileNumber, txtfldNetwork};
+        for(PTextField txtfld : objRequiredFields){
+            if(txtfld.getText().isEmpty()){
+                JOptionPane.showMessageDialog(
+                        null,
+                        txtfld.getName() + " cannot be empty",
+                        "Error", JOptionPane.ERROR_MESSAGE
+                );
+                return null;
+            }
+        }
+
         String strId = txtfldExamineeId.getText();
-        String strExamDate = txtfldDateExam.getText();
+
+        LocalDate objExamDate;
+        try{
+            objExamDate = LocalDate.parse(txtfldDateExam.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                    null,"Incorrect Date Format for Exam Date (YYYY-MM-DD)",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return null;
+        }
+
+        int strExamYear;
+        try{
+            strExamYear = Integer.parseInt(txtfldYearExam.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Incorrect Date Format for Exam Year (YYYY)",
+                    "Error", JOptionPane.ERROR_MESSAGE
+            );
+            return null;
+        }
+
         String strFirstName = txtfldFirstName.getText();
         String strLastName = txtfldLastName.getText();
         String strMiddleInitial = txtfldMiddleInitial.getText();
-        Integer intAge = txtfldAge.getText().isEmpty() ? null : Integer.parseInt(txtfldAge.getText());
+
+        int intAge = 0;
+        if(txtfldAge.getText().isEmpty()){
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Age field cannot be empty.",
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return null;
+        }else{
+            intAge = Integer.parseInt(txtfldAge.getText());
+        }
+
         String strSex = rdMale.isSelected() ? "M" :
                         rdFemale.isSelected() ? "F" : null;
+        if(strSex == null){
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Sex cannot be empty",
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return null;
+        }
+
         String strRole = rdStudent.isSelected() ? "Student" :
                         rdEmployee.isSelected() ? "Employee" : null;
+        if(strRole == null){
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Role cannot be empty",
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE
+                    );
+        }
+
         String strCivilStatus = rdSingle.isSelected() ? "S" :
                         rdMarried.isSelected() ? "M" :
                         rdDivorced.isSelected() ? "D" :
                         rdSeparated.isSelected() ? "E" :
                         rdWidowed.isSelected() ? "W" : null;
-        String strBirthdate = txtfldBirthdate.getText();
+        if(strCivilStatus == null){
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Civil status cannot be empty",
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+
+        LocalDate objBirthdate = LocalDate.parse(txtfldBirthdate.getText());
         String strMobileNumber = txtfldMobileNumber.getText();
         String strNetwork = txtfldNetwork.getText();
-        String strDivistion = txtfldDivision.getText();
+        String strDivision = txtfldDivision.getText();
 
         // Dorm
-        String strAddress = txtfldAddress.getText();
-        String strLandlordName = txtfldLandlordName.getText();
-        String strLandlordContact = txtfldLandlordContact.getText();
+        String strAddress;
+        String strLandlordName;
+        String strLandlordContact;
+        if(chkDormInformation.isSelected()) {
+            strAddress = txtfldAddress.getText();
+            strLandlordName = txtfldLandlordName.getText();
+            strLandlordContact = txtfldLandlordContact.getText();
 
+            if (strAddress.trim().isEmpty() ||
+                    strLandlordName.trim().isEmpty() ||
+                    strLandlordContact.trim().isEmpty()) {
+
+                JOptionPane.showMessageDialog(null,
+                        "Please fill out all dorm information fields.",
+                        "Input Error",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                return null; // or break, depending on your flow
+            }
+        }else{
+            strAddress = null;
+            strLandlordName = null;
+            strLandlordContact = null;
+        }
         // Guardian
-        String strGuardianName = txtfldGuardianName.getText();
-        String strGuardianRelation = txtfldGuardianRelation.getText();
-        String strGuardianAddress = txtfldGuardianAddress.getText();
-        String strGuardianContact = txtfldGuardianContact.getText();
-        String strGuardianNetwork = txtfldGuardianNetwork.getText();
+        String strGuardianName;
+        String strGuardianRelation;
+        String strGuardianAddress;
+        String strGuardianContact;
+        String strGuardianNetwork;
+        if(chkGuardianInformation.isSelected()) {
+            strGuardianName = txtfldGuardianName.getText();
+            strGuardianRelation = txtfldGuardianRelation.getText();
+            strGuardianAddress = txtfldGuardianAddress.getText();
+            strGuardianContact = txtfldGuardianContact.getText();
+            strGuardianNetwork = txtfldGuardianNetwork.getText();
+            if (strGuardianName.trim().isEmpty() ||
+                    strGuardianRelation.trim().isEmpty() ||
+                    strGuardianAddress.trim().isEmpty() ||
+                    strGuardianContact.trim().isEmpty() ||
+                    strGuardianNetwork.trim().isEmpty()) {
 
+                JOptionPane.showMessageDialog(null,
+                        "Please fill out all guardian information fields.",
+                        "Input Error",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+                return null;
+            }
+        }else{
+            strGuardianName = null;
+            strGuardianRelation = null;
+            strGuardianAddress = null;
+            strGuardianContact = null;
+            strGuardianNetwork = null;
+        }
         // Family Illness
         String strFamilyIllness = getFamilyIlnesses();
 
@@ -495,15 +996,15 @@ public class AddExamineeForm extends PScrollPanel{
             if(objImmField.getChkVaccineName().isSelected() && objImmField.isOthers){
                 if(objImmField.getOtherName().isEmpty()){
                     //Throw an error
-                    continue;
+                    return null;
                 }
                 if(objImmField.getDateGiven().isEmpty()){
                     //Throw an error
-                    continue;
+                    return null;
                 }
                 if(objImmField.getDose().isEmpty()){
                     //Throw an error
-                    continue;
+                    return null;
                 }
                 arrExamineeImmunizations.add(new Immunization(objImmField.getTxtfldOthers().getText(), objImmField.getDateGiven(), objImmField.getDose(), objImmField.getRemarks()));
                 continue;
@@ -512,22 +1013,29 @@ public class AddExamineeForm extends PScrollPanel{
             if(objImmField.getChkVaccineName().isSelected()){
                 if(objImmField.getDateGiven().isEmpty()){
                     //Throw an error
-                    continue;
+                    return null;
                 }
                 if(objImmField.getDose().isEmpty()){
                     //Throw an error
-                    continue;
+                    return null;
                 }
                 arrExamineeImmunizations.add(new Immunization(objImmField.getChkVaccineName().getText(), objImmField.getDateGiven(), objImmField.getDose(), objImmField.getRemarks()));
             }
         }
 
-        for(Immunization imm: arrExamineeImmunizations){
-            System.out.println(imm.strName);
-            System.out.println(imm.strDate);
-            System.out.println(imm.strDose);
-            System.out.println(imm.strRemarks);
-        }
+        return new Examinee(
+                strId, objExamDate, strExamYear,
+                strFirstName, strLastName, strMiddleInitial,
+                intAge, strSex, strRole, strCivilStatus,
+                objBirthdate, strMobileNumber, strNetwork, strDivision,
+                strAddress, strLandlordName, strLandlordContact,
+                strGuardianName, strGuardianRelation, strGuardianAddress,
+                strGuardianContact, strGuardianNetwork,
+                strFamilyIllness,
+                arrExamineeConditions,
+                arrExamineeImmunizations
+        );
+
     }
 
     private String getFamilyIlnesses(){

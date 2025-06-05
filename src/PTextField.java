@@ -47,6 +47,7 @@ public class PTextField extends JTextField {
         setRadius(radius);
         setBorderColor(borderColor);
         setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN,PLabel.HEADING3));
+        setName(placeholder);
     }
 
     PTextField(String placeholder, int radius) {

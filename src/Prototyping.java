@@ -353,7 +353,7 @@ class Constants{
 
 }
 
-class Examinee{
+class ExamineeObj{
     public String id,  last_name, first_name;
     public LocalDate birthdate, date_of_exam;
     public Character middle_initial, sex, civil_status;
@@ -362,7 +362,7 @@ class Examinee{
     public String landlord_name, landlord_contact_number, guardian_name, guardian_address, guardian_relation, guardian_network, family_history_illness;
     private static final Random rand = new Random();
 
-    Examinee(){
+    ExamineeObj(){
         id = generate_id();
         date_of_exam = generate_date();
         year_of_exam = date_of_exam.getYear();
@@ -597,7 +597,7 @@ public class Prototyping {
             System.out.println("Success");
 
             while(true) {
-                Examinee examinee = new Examinee();
+                ExamineeObj examinee = new ExamineeObj();
                 examinee.printExaminee();
                 if(sc.nextLine().equalsIgnoreCase("abort")){
                     break;
