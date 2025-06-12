@@ -351,16 +351,280 @@ class Constants{
                 "Foster Family"
     };
 
+    public static Object[][] medical_conditions = {
+            {"Hypertension", new String[]{"Lisinopril", "Amlodipine", "Losartan"}},
+            {"Type 2 Diabetes", new String[]{"Metformin", "Glipizide", "Insulin"}},
+            {"Asthma", new String[]{"Salbutamol", "Fluticasone", "Montelukast"}},
+            {"High Cholesterol", new String[]{"Atorvastatin", "Rosuvastatin"}},
+            {"COPD", new String[]{"Tiotropium", "Salmeterol", "Fluticasone"}},
+            {"GERD", new String[]{"Omeprazole", "Pantoprazole"}},
+            {"Osteoarthritis", new String[]{"Acetaminophen", "Naproxen"}},
+            {"Rheumatoid Arthritis", new String[]{"Methotrexate", "Hydroxychloroquine"}},
+            {"Depression", new String[]{"Sertraline", "Fluoxetine"}},
+            {"Anxiety Disorder", new String[]{"Alprazolam", "Buspirone"}},
+            {"Hypothyroidism", new String[]{"Levothyroxine"}},
+            {"Chronic Kidney Disease", new String[]{"Erythropoietin", "Sodium Bicarbonate"}},
+            {"Gout", new String[]{"Allopurinol", "Colchicine"}},
+            {"Migraine", new String[]{"Propranolol", "Topiramate"}},
+            {"Epilepsy", new String[]{"Carbamazepine", "Valproate"}},
+            {"Psoriasis", new String[]{"Methotrexate", "Ustekinumab"}},
+            {"Multiple Sclerosis", new String[]{"Interferon beta", "Glatiramer"}},
+            {"HIV/AIDS", new String[]{"Tenofovir", "Efavirenz", "Lamivudine"}},
+            {"Parkinson’s Disease", new String[]{"Levodopa", "Carbidopa"}},
+            {"Schizophrenia", new String[]{"Risperidone", "Olanzapine"}},
+            {"Bipolar Disorder", new String[]{"Lithium", "Valproic acid"}},
+            {"Ankylosing Spondylitis", new String[]{"Etanercept", "Infliximab"}},
+            {"Chronic Pain", new String[]{"Gabapentin", "Tramadol"}},
+            {"Benign Prostatic Hyperplasia", new String[]{"Tamsulosin", "Finasteride"}},
+            {"Coronary Artery Disease", new String[]{"Aspirin", "Atorvastatin", "Metoprolol"}},
+            {"Atrial Fibrillation", new String[]{"Warfarin", "Apixaban", "Amiodarone"}},
+            {"Peptic Ulcer Disease", new String[]{"Omeprazole", "Ranitidine"}},
+            {"Chronic Hepatitis B", new String[]{"Entecavir", "Tenofovir"}},
+            {"Chronic Hepatitis C", new String[]{"Sofosbuvir", "Ledipasvir"}},
+            {"Systemic Lupus Erythematosus", new String[]{"Hydroxychloroquine", "Prednisone"}},
+            {"Ulcerative Colitis", new String[]{"Mesalamine", "Azathioprine"}},
+            {"Crohn's Disease", new String[]{"Infliximab", "Adalimumab"}},
+            {"Polycystic Ovary Syndrome", new String[]{"Metformin", "Oral contraceptives"}},
+            {"Endometriosis", new String[]{"Norethindrone", "GnRH agonists"}},
+            {"Heart Failure", new String[]{"Furosemide", "Lisinopril", "Spironolactone"}},
+            {"Chronic Sinusitis", new String[]{"Fluticasone nasal spray"}},
+            {"Obstructive Sleep Apnea", new String[]{"CPAP therapy (non-drug)"}},
+            {"Thalassemia", new String[]{"Folic acid", "Deferoxamine"}},
+            {"Hemophilia", new String[]{"Factor VIII", "Desmopressin"}},
+            {"Cystic Fibrosis", new String[]{"Ivacaftor", "Dornase alfa"}},
+            {"Sickle Cell Disease", new String[]{"Hydroxyurea", "Folic acid"}},
+            {"Tuberculosis", new String[]{"Isoniazid", "Rifampin"}},
+            {"Glaucoma", new String[]{"Latanoprost", "Timolol"}},
+            {"Macular Degeneration", new String[]{"Ranibizumab", "Aflibercept"}},
+            {"Chronic Fatigue Syndrome", new String[]{"Amitriptyline", "Duloxetine"}},
+            {"Fibromyalgia", new String[]{"Pregabalin", "Milnacipran"}},
+            {"Tinnitus", new String[]{"Nortriptyline", "Zinc supplements"}},
+            {"Vertigo", new String[]{"Meclizine", "Betahistine"}},
+            {"Hyperthyroidism", new String[]{"Methimazole", "Propranolol"}},
+            {"Addison’s Disease", new String[]{"Hydrocortisone", "Fludrocortisone"}},
+            {"Cushing’s Syndrome", new String[]{"Ketoconazole", "Metyrapone"}},
+            {"Acne Vulgaris", new String[]{"Benzoyl peroxide", "Isotretinoin"}},
+            {"Rosacea", new String[]{"Metronidazole gel", "Doxycycline"}},
+            {"Chronic Urticaria", new String[]{"Cetirizine", "Montelukast"}},
+            {"Panic Disorder", new String[]{"Paroxetine", "Clonazepam"}},
+            {"Obsessive-Compulsive Disorder", new String[]{"Fluoxetine", "Clomipramine"}},
+            {"Tourette Syndrome", new String[]{"Haloperidol", "Clonidine"}},
+            {"Narcolepsy", new String[]{"Modafinil", "Sodium oxybate"}},
+            {"Restless Legs Syndrome", new String[]{"Ropinirole", "Pramipexole"}},
+            {"Pulmonary Hypertension", new String[]{"Sildenafil", "Bosentan"}},
+            {"Raynaud’s Disease", new String[]{"Nifedipine", "Losartan"}},
+            {"Eczema", new String[]{"Hydrocortisone cream", "Tacrolimus"}},
+            {"Chronic Back Pain", new String[]{"Naproxen", "Duloxetine"}},
+            {"Tension Headaches", new String[]{"Amitriptyline", "Ibuprofen"}},
+            {"Cluster Headaches", new String[]{"Verapamil", "Sumatriptan"}},
+            {"Lactose Intolerance", new String[]{"Lactase enzyme supplements"}},
+            {"Celiac Disease", new String[]{"Gluten-free diet (no meds)"}},
+            {"IBS", new String[]{"Dicyclomine", "Loperamide"}},
+            {"Fatty Liver Disease", new String[]{"Vitamin E", "Pioglitazone"}},
+            {"Pneumonia (Chronic)", new String[]{"Azithromycin (for prevention)"}},
+            {"Chronic Pancreatitis", new String[]{"Pancreatic enzymes", "Omeprazole"}},
+            {"Nephrotic Syndrome", new String[]{"Prednisone", "Furosemide"}},
+            {"Interstitial Cystitis", new String[]{"Amitriptyline", "Pentosan polysulfate"}},
+            {"Urinary Incontinence", new String[]{"Oxybutynin", "Mirabegron"}},
+            {"Prostatitis", new String[]{"Ciprofloxacin", "Alpha-blockers"}},
+            {"Menopause Symptoms", new String[]{"Estradiol", "Medroxyprogesterone"}},
+            {"Andropause", new String[]{"Testosterone replacement"}},
+            {"Allergic Rhinitis", new String[]{"Loratadine", "Fluticasone"}},
+            {"Psoriatic Arthritis", new String[]{"Methotrexate", "Adalimumab"}},
+            {"Eosinophilic Esophagitis", new String[]{"Budesonide (oral suspension)"}},
+            {"Barrett’s Esophagus", new String[]{"Esomeprazole", "Lansoprazole"}},
+            {"Anemia", new String[]{"Ferrous sulfate", "Erythropoietin"}},
+            {"Hypercalcemia", new String[]{"Pamidronate", "Calcitonin"}},
+            {"Hypocalcemia", new String[]{"Calcium carbonate", "Calcitriol"}},
+            {"Hyperkalemia", new String[]{"Sodium polystyrene sulfonate", "Patiromer"}},
+            {"Hypokalemia", new String[]{"Potassium chloride"}},
+            {"Pancreatic Cancer", new String[]{"Gemcitabine", "Paclitaxel"}},
+            {"Liver Cirrhosis", new String[]{"Lactulose", "Spironolactone"}},
+            {"GERD (Refractory)", new String[]{"Esomeprazole", "Famotidine"}},
+            {"Reflux Laryngitis", new String[]{"Omeprazole", "Gaviscon"}},
+            {"BPH (Severe)", new String[]{"Dutasteride", "Tamsulosin"}},
+            {"Meniere’s Disease", new String[]{"Betahistine", "Diuretics"}},
+            {"Myasthenia Gravis", new String[]{"Pyridostigmine", "Prednisone"}},
+            {"Amyotrophic Lateral Sclerosis", new String[]{"Riluzole", "Edaravone"}},
+            {"Huntington’s Disease", new String[]{"Tetrabenazine", "Olanzapine"}},
+            {"Alcohol Dependence", new String[]{"Disulfiram", "Naltrexone"}},
+            {"Opioid Dependence", new String[]{"Methadone", "Buprenorphine"}}
+    };
+
+    public static String[] immunizations = {"Hepatitis A",
+            "Hepatitis B",
+            "Influenza (Flu)",
+            "Tetanus",
+            "Diphtheria",
+            "Pertussis (Whooping Cough)",
+            "MMR (Measles, Mumps, Rubella)",
+            "Polio (IPV)",
+            "Varicella (Chickenpox)",
+            "HPV (Human Papillomavirus)",
+            "Meningococcal ACWY",
+            "Meningococcal B",
+            "Pneumococcal (PCV13)",
+            "Pneumococcal (PPSV23)",
+            "COVID-19 (Pfizer)",
+            "COVID-19 (Moderna)",
+            "COVID-19 (Novavax)",
+            "Rotavirus (RV1)",
+            "Rotavirus (RV5)",
+            "Haemophilus influenzae type b (Hib)",
+            "Typhoid (Injectable)",
+            "Typhoid (Oral)",
+            "Cholera",
+            "Yellow Fever",
+            "Rabies (pre-exposure)",
+            "Rabies (post-exposure)",
+            "Japanese Encephalitis",
+            "Tick-borne Encephalitis",
+            "BCG (Tuberculosis)",
+            "Zoster (Shingles – Shingrix)",
+            "Zoster (Zostavax)",
+            "Malaria (RTS,S/AS01 – Mosquirix)",
+            "Dengue (Dengvaxia)",
+            "Smallpox",
+            "Monkeypox (JYNNEOS)",
+            "Anthrax",
+            "Ebola (Ervebo)",
+            "RSV (Respiratory Syncytial Virus)",
+            "Adenovirus (military only)",
+            "Mumps (standalone)",
+            "Measles (standalone)",
+            "Rubella (standalone)",
+            "TDaP (Tetanus, Diphtheria, Pertussis)",
+            "DTaP (Pediatric TDaP)",
+            "Td (Tetanus, Diphtheria only)",
+            "Hepatitis A and B (Twinrix)",
+            "Influenza (High-dose)",
+            "Influenza (Live attenuated)",
+            "Influenza (Intradermal)",
+            "Influenza (Recombinant)",
+            "Hib-MenCY (MenHibrix)",
+            "MMRV (ProQuad)",
+            "Comvax (Hib + Hep B)",
+            "Pentacel (DTaP + IPV + Hib)",
+            "Kinrix (DTaP + IPV)",
+            "Pediarix (DTaP + IPV + Hep B)",
+            "Boostrix (TDaP)",
+            "Adacel (TDaP)",
+            "Heplisav-B (Hepatitis B)",
+            "Vaxneuvance (PCV15)",
+            "Prevnar 20 (PCV20)",
+            "Menactra (Meningococcal ACWY)",
+            "MenQuadfi (Meningococcal ACYW)",
+            "Bexsero (Meningococcal B)",
+            "Trumenba (Meningococcal B)",
+            "Gardasil 9 (HPV)",
+            "Pneumovax 23",
+            "Synflorix (PCV10)",
+            "Imovax Rabies",
+            "Verorab (Rabies)",
+            "Avaxim (Hepatitis A)",
+            "Vivotif (Typhoid Oral)",
+            "Typhim Vi (Typhoid Injectable)",
+            "IXIARO (Japanese Encephalitis)",
+            "Qdenga (Dengue)",
+            "BioThrax (Anthrax)",
+            "ACAM2000 (Smallpox)",
+            "TicoVac (Tick-borne Encephalitis)",
+            "Jynneos (Monkeypox/Smallpox)",
+            "Ervebo (Ebola)",
+            "Arexvy (RSV, older adults)",
+            "Abrysvo (RSV, maternal)",
+            "Vaxchora (Cholera)",
+            "Fluzone Quadrivalent",
+            "Flucelvax",
+            "Afluria",
+            "Agriflu",
+            "Influvac",
+            "Flublok",
+            "FluMist",
+            "Shingrix",
+            "Zostavax",
+            "Menveo (Meningococcal ACWY)",
+            "Engerix-B (Hep B)",
+            "Recombivax HB (Hep B)",
+            "Havrix (Hep A)",
+            "Vaqta (Hep A)",
+            "Twinrix (Hep A + B)",
+            "Infanrix (DTaP)",
+            "Pentaxim (DTaP + IPV + Hib)",
+            "Hexaxim (DTaP + IPV + HepB + Hib)"
+        };
+
+    public static String[] vaccine_remarks = {
+            "Highly effective in preventing infection.",
+            "Administered as a series of doses.",
+            "Requires booster shots for continued immunity.",
+            "Recommended for all age groups.",
+            "Important for travelers to certain regions.",
+            "May cause mild side effects such as fever.",
+            "Long-term immunity after full vaccination.",
+            "Preventative for highly contagious diseases.",
+            "Protects against life-threatening infections.",
+            "Recommended for infants and young children.",
+            "Must be administered in a healthcare setting.",
+            "Shown to reduce the spread of disease.",
+            "Can prevent complications like hospitalization.",
+            "Needs to be updated regularly (e.g., flu shots).",
+            "Essential for herd immunity.",
+            "Provides protection against multiple strains.",
+            "Can be given at various stages of life.",
+            "Safety monitored through extensive clinical trials.",
+            "Widely available and accessible worldwide.",
+            "Required for school entry in many areas.",
+            "May cause soreness at the injection site.",
+            "Immunity develops within weeks after vaccination.",
+            "Recommended during pregnancy for certain vaccines.",
+            "Helps prevent outbreaks of infectious diseases.",
+            "Effective in reducing disease transmission.",
+            "Widely recognized as a public health success.",
+            "Helps reduce healthcare costs by preventing disease.",
+            "May need special storage conditions (e.g., cold chain).",
+            "Has significantly reduced global disease burden.",
+            "Ongoing research to improve effectiveness and coverage.",
+            "Should be part of routine immunization schedules.",
+            "In some cases, vaccination can prevent cancer.",
+            "Contains inactive or weakened forms of the virus.",
+            "Protection lasts for several years or a lifetime.",
+            "May cause mild symptoms similar to the illness.",
+            "Essential for protecting vulnerable populations.",
+            "Available in combination vaccines for convenience.",
+            "Can reduce the spread of antibiotic-resistant bacteria.",
+            "Requires informed consent before administration.",
+            "Usually covered by health insurance programs.",
+            "Can be administered via injection or nasal spray.",
+            "New formulations are continuously developed.",
+            "Supports global efforts to eradicate diseases.",
+            "May need to be updated based on emerging strains.",
+            "The cost is typically low and accessible.",
+            "Could be mandatory for healthcare workers.",
+            "Can be administered alongside other vaccines.",
+            "May cause allergic reactions in rare cases.",
+            "Ensures immunity even if exposed to the virus.",
+            "Helps protect vulnerable groups like the elderly.",
+            "Requires careful tracking and record-keeping.",
+            "Recommends vaccination before exposure to the virus.",
+            "Vaccination programs have proven to save lives.",
+            "May reduce the severity of infection if contracted.",
+            "Required for certain high-risk professions."
+    };
+    public static String[] dose = {"1st Dose", "2nd Dose", "3rd Dose", "4th Dose", "5th Dose", "Booster"};
 }
 
 class ExamineeObj{
     public String id,  last_name, first_name;
     public LocalDate birthdate, date_of_exam;
+    public Date[] immunization_date = new Date[6];
     public Character middle_initial, sex, civil_status;
     public int age, year_of_exam;
     public String division, role, mobile_number, network, address_in_miagao;
-    public String landlord_name, landlord_contact_number, guardian_name, guardian_address, guardian_relation, guardian_network, family_history_illness;
-    private static final Random rand = new Random();
+    public String landlord_name, landlord_contact_number, guardian_mobile_number, guardian_name, guardian_address, guardian_relation, guardian_network, family_history_illness;
+    public Object[][] medical_conditions = new Object[3][3];
+    public String[] dose = new String[6], immunization = new String[6], vaccine_remarks = new String[6];
+   private static final Random rand = new Random();
 
     ExamineeObj(){
         id = generate_id();
@@ -384,7 +648,81 @@ class ExamineeObj{
         guardian_address = generate_guardian_address(guardian_name);
         guardian_relation = generate_guardian_relation(guardian_name);
         guardian_network = generate_guardian_network();
+        guardian_mobile_number = generate_mobile_number();
         family_history_illness = generate_family_history_illness();
+
+        // Medical Conditions
+        generate_medical_conditions();
+
+        // Immunizations
+        generate_immunizations();
+    }
+
+    public void generate_medical_conditions(){
+        if (rand.nextDouble() < 0.7) {
+            int howMany = rand.nextInt(3) + 1; // 1 to 3
+            Set<Integer> chosenIndices = new HashSet<>();
+
+            while (chosenIndices.size() < howMany) {
+                chosenIndices.add(rand.nextInt(Constants.medical_conditions.length));
+            }
+
+            int i = 0;
+            for (int index : chosenIndices) {
+                medical_conditions[i][0] = Constants.medical_conditions[index][0];
+                medical_conditions[i][1] = Constants.medical_conditions[index][1];
+                // 50% chance to assign a date
+                if (rand.nextDouble() < 0.5) {
+                    medical_conditions[i][2] = generate_date();
+                } else {
+                    medical_conditions[i][2] = null;
+                }
+                i++;
+            }
+        } else {
+            System.out.println("No medical conditions assigned (30% chance).");
+        }
+    }
+
+    public void generate_immunizations(){
+        if (rand.nextDouble() <= 0.7) {
+            int count = rand.nextInt(6) + 1;  // 1 to 6 immunizations
+            immunization = new String[count];
+            immunization_date = new Date[count];
+            vaccine_remarks = new String[count];
+
+            // Random unique immunization indexes
+            Set<Integer> chosenIndexes = new HashSet<>();
+            while (chosenIndexes.size() < count) {
+                chosenIndexes.add(rand.nextInt(Constants.immunizations.length));
+            }
+
+            int i = 0;
+            for (int idx : chosenIndexes) {
+                immunization[i] = Constants.immunizations[idx];
+
+                // 80% chance to assign a generated date
+                if (rand.nextDouble() <= 0.8) {
+                    immunization_date[i] = Date.valueOf(generate_date());
+                } else {
+                    immunization_date[i] = null;
+                }
+
+                // 30% chance to assign remarks string
+                if (rand.nextDouble() <= 0.3) {
+                    vaccine_remarks[i] = generateString(Constants.vaccine_remarks);
+                } else {
+                    vaccine_remarks[i] = null;
+                }
+
+                dose[i] = Constants.dose[rand.nextInt(Constants.dose.length)];
+                i++;
+            }
+        } else {
+            immunization = new String[0];
+            immunization_date = new Date[0];
+            vaccine_remarks = new String[0];
+        }
     }
 
     public void printExaminee() {
@@ -603,8 +941,8 @@ public class Prototyping {
                     break;
                 }
 
-                String cols = "examinee_id, year_of_exam, date_of_exam, last_name, first_name, middle_initial, age, sex, birthdate, civil_status, role, mobile_number, network, address_in_miagao, landlord_name, landlord_contact_number, guardian_name, guardian_address, guardian_relation, family_history_illness, division, guardian_network";
-                String query = "INSERT INTO examinee (" + cols + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String cols = "examinee_id, year_of_exam, date_of_exam, last_name, first_name, middle_initial, age, sex, birthdate, civil_status, role, mobile_number, network, address_in_miagao, landlord_name, landlord_contact_number, guardian_name, guardian_address, guardian_relation, family_history_illness, division, guardian_network, guardian_mobile_number";
+                String query = "INSERT INTO examinee (" + cols + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement stmnt = conn.prepareStatement(query);
                 stmnt.setString(1, examinee.id);
                 stmnt.setInt(2, examinee.year_of_exam);
@@ -685,13 +1023,88 @@ public class Prototyping {
                     stmnt.setString(22, examinee.guardian_network);
                 }
 
+                if (examinee.guardian_mobile_number == null) {
+                    stmnt.setNull(23, java.sql.Types.VARCHAR);
+                } else {
+                    stmnt.setString(23, examinee.guardian_mobile_number);
+                }
+
+
                 // Execute the insert
                 int rowsAffected = stmnt.executeUpdate();
                 System.out.println("Inserted rows: " + rowsAffected);
 
-                // Close PreparedStatement before next loop iteration
-                stmnt.close();
-                stmnt = null;
+
+                String insertSql = "INSERT INTO current_medical_condition (examinee_id, medical_condition, condition_identified_on, maintenance_medication) VALUES (?,?,?,?)";
+                stmnt = conn.prepareStatement(insertSql);
+                for (int i = 0; i < examinee.medical_conditions.length; i++) {
+                    Object[] conditionRow = examinee.medical_conditions[i];
+                    if(conditionRow[0] == null){
+                        continue;
+                    }
+                    stmnt.setString(1, examinee.id);
+
+                    // medical_condition at index 0, cast to String
+                    String medicalCondition = (conditionRow[0] != null) ? conditionRow[0].toString() : null;
+                    stmnt.setString(2, medicalCondition);
+
+                    // condition_identified_on at index 2, cast to LocalDate or String and convert to java.sql.Date
+                    if (conditionRow[2] != null) {
+                        // assuming conditionRow[2] is a LocalDate or a String formatted yyyy-MM-dd
+                        java.sql.Date sqlDate;
+                        if (conditionRow[2] instanceof java.time.LocalDate) {
+                            sqlDate = java.sql.Date.valueOf((java.time.LocalDate) conditionRow[2]);
+                        } else {
+                            sqlDate = java.sql.Date.valueOf(conditionRow[2].toString());
+                        }
+                        stmnt.setDate(3, sqlDate);
+                    } else {
+                        stmnt.setNull(3, java.sql.Types.DATE);
+                    }
+
+                    // maintenance_medication at index 1
+                    if (conditionRow[1] != null && conditionRow[1] instanceof String[]) {
+                        String[] meds = (String[]) conditionRow[1];
+                        String maintenanceMed = String.join(", ", meds); // join into a single string
+                        stmnt.setString(4, maintenanceMed);
+                    } else if (conditionRow[1] != null) {
+                        stmnt.setString(4, conditionRow[1].toString());
+                    } else {
+                        stmnt.setNull(4, java.sql.Types.VARCHAR);
+                    }
+
+                    stmnt.executeUpdate();
+                }
+
+                insertSql = "INSERT INTO immunization_background (examinee_id, vaccine_name, vaccine_given_date, vaccine_dose, vaccine_remarks) VALUES (?,?,?,?,?)";
+                stmnt = conn.prepareStatement(insertSql);
+
+                for (int i = 0; i < examinee.immunization.length; i++) {
+                    if (examinee.immunization[i] != null && !examinee.immunization[i].isEmpty()) {
+                        stmnt.setString(1, examinee.id);  // examinee_id
+                        stmnt.setString(2, examinee.immunization[i]);  // vaccine_name
+
+                        if (examinee.immunization_date[i] != null) {
+                            stmnt.setDate(3, examinee.immunization_date[i]);  // vaccine_given_date
+                        } else {
+                            stmnt.setNull(3, java.sql.Types.DATE);
+                        }
+
+                        if (examinee.dose[i] != null && !examinee.dose[i].isEmpty()) {
+                            stmnt.setString(4, examinee.dose[i]);  // vaccine_dose
+                        } else {
+                            stmnt.setNull(4, java.sql.Types.VARCHAR);
+                        }
+
+                        if (examinee.vaccine_remarks[i] != null && !examinee.vaccine_remarks[i].isEmpty()) {
+                            stmnt.setString(5, examinee.vaccine_remarks[i]);  // vaccine_remarks
+                        } else {
+                            stmnt.setNull(5, java.sql.Types.VARCHAR);
+                        }
+
+                        stmnt.executeUpdate();
+                    }
+                }
             }
 
         }catch(Exception e){

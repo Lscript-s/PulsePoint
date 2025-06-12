@@ -19,6 +19,12 @@ public class PLabel extends JLabel {
         setFont(new Font(FONTSTYLE, Font.PLAIN, HEADING3));
     }
 
+    PLabel(String text, boolean isBold){
+        super(text);
+        setFont(new Font(FONTSTYLE, Font.PLAIN, HEADING3));
+        setBold(isBold);
+    }
+
     PLabel(String text, int heading){
         super(text);
         if(heading == HEADING1){
@@ -31,6 +37,8 @@ public class PLabel extends JLabel {
             throw new IllegalArgumentException("Invalid Heading at argument 2.");
         }
     }
+
+
 
     PLabel(String text, Color color){
         super(text);

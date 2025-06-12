@@ -18,7 +18,7 @@ public class MainWindow {
     Dashboard dashboard = new Dashboard();
     Sidebar sidebar = new Sidebar();
     AddExamineeForm addExamineeForm = new AddExamineeForm();
-
+    ExamineeCatalog catalog = new ExamineeCatalog();
     MainWindow(){
         initializeFrame();
 
@@ -212,7 +212,11 @@ public class MainWindow {
     }
 
     private void addExamineeCatalog(){
-        pnlBody.add(new PLabel("Examinee Catalog", PLabel.HEADING1));
+        gbcCons.reset();
+        gbcCons.setConstraints(-1,-1,1,1,1);
+        catalog.refresh();
+        pnlBody.add(catalog.getScrollPane(), gbcCons);
+        gbcCons.reset();
     }
 
     private void addAboutUs(){

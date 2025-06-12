@@ -10,6 +10,8 @@ public class PulsePointConstants {
     public static final Color PINK = Color.decode("#d7c8c8");
     public static final Color BLUE = Color.decode("#0cc0df");
     public static final Color GRAY= Color.decode("#f3e9e9");
+    public static final Color RED = Color.decode("#FF6868");
+    public static final Color GREEN = Color.decode("#9AFF9D");
 
     // FONT
     public static final Font HEADING1 = new Font(PLabel.FONTSTYLE, Font.BOLD, PLabel.HEADING1);
