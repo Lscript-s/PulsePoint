@@ -5,12 +5,13 @@ import java.awt.event.ActionListener;
 public class ExamineeRecord extends PPanel {
     private PLabel lblID = new PLabel(), lblName = new PLabel(), lblRole = new PLabel();
     private PButton btnView = new PButton("View Record");
-    private String strRecordId;
+    private String strRecordId, strFullName;
     private PPanel pnlRole = new PPanel();
     ExamineeRecord(String id, String name, String role) {
         strRecordId = id;
         lblID.setText(id);
         lblName.setText(name);
+        strFullName = name;
         lblRole.setText(role);
         setBackground(PulsePointConstants.WHITE);
 
@@ -75,6 +76,10 @@ public class ExamineeRecord extends PPanel {
 
     public PButton getButton(){
         return btnView;
+    }
+
+    public String getFullName(){
+        return strFullName;
     }
 
     public void setActionListener(ActionListener e){

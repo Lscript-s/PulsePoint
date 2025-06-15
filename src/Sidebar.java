@@ -8,11 +8,8 @@ public class Sidebar extends PPanel{
             new ImageIcon("src/icons/Icon_Catalog.png"), 24,24);
     private final PButton btnAddExaminee = new PButton("Add Examinee",
             new ImageIcon("src/icons/Icon_Add.png"), 24,24);
-    private final PButton btnSettings = new PButton("Settings",
-            new ImageIcon("src/icons/Icon_Settings.png"), 24,24);
     private final PButton btnAboutUs = new PButton("About Us",
             new ImageIcon("src/icons/Icon_AboutUs.png"), 24,24);
-
     private final PPanel pnlDashboard = new PPanel(new GridBagLayout());
     private final PPanel pnlExamineeCatalog = new PPanel(new GridBagLayout());
     private final PPanel pnlAddExaminee = new PPanel(new GridBagLayout());
@@ -75,16 +72,6 @@ public class Sidebar extends PPanel{
         btnAddExaminee.setBackgroundClickedColor(PulsePointConstants.PINK);
         pnlAddExaminee.add(btnAddExaminee, gbcCons);
 
-
-        btnSettings.setHorizontalAlignment(SwingConstants.LEFT);
-        btnSettings.setHorizontalTextPosition(SwingConstants.RIGHT);
-        btnSettings.setIconTextGap(8);
-        btnSettings.setFont(new Font(PLabel.FONTSTYLE, Font.PLAIN, PLabel.HEADING2));
-        btnSettings.setBackgroundHoverColor(clrBlue);
-        btnSettings.setBackgroundClickedColor(PulsePointConstants.PINK);
-        pnlSettings.add(btnSettings, gbcCons);
-
-
         btnAboutUs.setHorizontalAlignment(SwingConstants.LEFT);
         btnAboutUs.setHorizontalTextPosition(SwingConstants.RIGHT);
         btnAboutUs.setIconTextGap(8);
@@ -104,6 +91,7 @@ public class Sidebar extends PPanel{
         add(pnlAddExaminee, gbcCons);
         gbcCons.gridy++;
         add(pnlExamineeCatalog, gbcCons);
+        gbcCons.gridy++;
         gbcCons.setConstraints(-1,gbcCons.gridy+1, 1,0.8,GridBagConstraints.VERTICAL);
         add(Box.createVerticalStrut(100), gbcCons);
 
@@ -124,19 +112,14 @@ public class Sidebar extends PPanel{
     public PButton getAboutUs(){
         return btnAboutUs;
     }
-    public PButton getSettings(){
-        return btnSettings;
-    }
     public PButton getExamineeCatalog(){
         return btnExamineeCatalog;
     }
-
     // Public Functions
     public void setFocus(String focusedButton){
         pnlDashboard.setBackground(Color.WHITE);
         pnlAddExaminee.setBackground(Color.WHITE);
         pnlExamineeCatalog.setBackground(Color.WHITE);
-        pnlSettings.setBackground(Color.WHITE);
         pnlAboutUs.setBackground(Color.WHITE);
 
         if(focusedButton.equals("Dashboard")){
@@ -145,8 +128,6 @@ public class Sidebar extends PPanel{
             pnlAddExaminee.setBackground(clrGray);
         }else if (focusedButton.equals("Examinee Catalog")) {
             pnlExamineeCatalog.setBackground(clrGray);
-        }else if(focusedButton.equals("Settings")){
-            pnlSettings.setBackground(clrGray);
         }else if(focusedButton.equals("About Us")){
             pnlAboutUs.setBackground(clrGray);
         }

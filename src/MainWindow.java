@@ -44,19 +44,10 @@ public class MainWindow {
         setDashboardButton();
     }
 
-    private void testFunc(){
-        header.getLogoutButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Hi");
-            }
-        });
-    }
-
     private void initializeFrame(){
         frmMainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frmMainWindow.setSize(1140,720);
-        frmMainWindow.setMinimumSize(new Dimension(1080,720));
+        frmMainWindow.setMinimumSize(new Dimension(1140,720));
         frmMainWindow.setLayout(new GridBagLayout());
     }
 
@@ -95,31 +86,17 @@ public class MainWindow {
         header.getSearchButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println(header.getSearchTextField().getText());
+                catalog.removeAll();
+                catalog = new ExamineeCatalog(header.getSearchTextField().getText());
 
-            }
-        });
-
-        // Header Logout Button
-        header.getLogoutButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Hi");
-            }
-        });
-
-        // Header Search Button
-        header.getSearchButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
-        // Header User Button
-        header.getUserButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
+                gbcCons.reset();
+                gbcCons.setConstraints(-1,-1,1,1,1);
+                pnlBody.removeAll();
+                pnlBody.add(catalog.getScrollPane(), gbcCons);
+                gbcCons.reset();
+                pnlBody.revalidate();
+                pnlBody.repaint();
             }
         });
     }
@@ -153,13 +130,7 @@ public class MainWindow {
                 setBodyPanel();
             }
         });
-        sidebar.getSettings().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                strCurrentBodyDisplay = "Settings";
-                setBodyPanel();
-            }
-        });
+
         sidebar.getAboutUs().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -167,8 +138,6 @@ public class MainWindow {
                 setBodyPanel();
             }
         });
-
-
     }
 
     private void addDashboard(){
@@ -212,6 +181,7 @@ public class MainWindow {
     }
 
     private void addExamineeCatalog(){
+        catalog = new ExamineeCatalog();
         gbcCons.reset();
         gbcCons.setConstraints(-1,-1,1,1,1);
         catalog.refresh();
@@ -237,7 +207,7 @@ public class MainWindow {
             addSettings();
         }else if(strCurrentBodyDisplay.equals("About Us")) {
             addAboutUs();
-        } else{
+        }else{
             addBodyFiller();
         }
 

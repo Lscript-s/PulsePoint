@@ -29,7 +29,10 @@ class ImmunizationFields{
         txtfldRemarks = new PTextField("Remarks", 30, PulsePointConstants.GRAY);
     }
 
-    public String getDateGiven(){return txtfldDateGiven.getText();}
+    public String getDateGiven() {
+        String text = txtfldDateGiven.getText().trim();
+        return text.isEmpty() ? null : text;
+    }
     public String getDose(){return txtfldDose.getText();}
     public String getRemarks(){return txtfldRemarks.getText();}
     public String getOtherName(){return txtfldOthers.getText();}
@@ -41,10 +44,12 @@ class ImmunizationFields{
     public PTextField getTxtfldOthers(){return txtfldOthers;}
     public void clearAll(){
         this.chkVaccineName.setSelected(false);
-        this.txtfldOthers.setText("");
         this.txtfldDateGiven.setText("");
         this.txtfldRemarks.setText("");
         this.txtfldDose.setText("");
+        if(this.txtfldOthers!=null) {
+            this.txtfldOthers.setText("");
+        }
     }
 }
 
@@ -68,8 +73,9 @@ class MedicalConditionFields{
         return txtfldConditionName.getText();
     }
 
-    public String getDate(){
-        return txtfldDateIdentified.getText();
+    public String getDate() {
+        String text = txtfldDateIdentified.getText().trim();
+        return text.isEmpty() ? null : text;
     }
 
     public String getMaintenance(){
@@ -481,11 +487,13 @@ public class AddExamineeForm extends PScrollPanel{
     private void addSaveButton(){
         PPanel pnlAdd = new PPanel();
         pnlAdd.setLayout(new GridBagLayout());
-        btnAddExaminee.setBackground(PulsePointConstants.RED);
+        btnAddExaminee.setBackground(PulsePointConstants.GREEN);
+        btnAddExaminee.setHoverClick();
         btnAddExaminee.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Examinee examinee = extractInfo();
+                System.out.println(extractInfo());
                 if(examinee != null) {
                     if(!examinee.addBasicInfoToDB()){
                         JOptionPane.showMessageDialog(
@@ -518,6 +526,7 @@ public class AddExamineeForm extends PScrollPanel{
                     }
 
                     resetFormFields();
+
                     JOptionPane.showMessageDialog(
                             null,
                             "Successfully added to database",
@@ -535,6 +544,8 @@ public class AddExamineeForm extends PScrollPanel{
         pnlAdd.add(btnAddExaminee,gbcCons);
         gbcCons.reset();
         append(pnlAdd);
+
+
     }
 
     private void resetFormFields() {
@@ -585,7 +596,6 @@ public class AddExamineeForm extends PScrollPanel{
         for(MedicalConditionFields objMedicalCondition : objMedicalConditions){
             objMedicalCondition.clearAll();
         }
-
     }
 
     private Examinee extractInfo(){
@@ -630,7 +640,13 @@ public class AddExamineeForm extends PScrollPanel{
 
         String strFirstName = txtfldFirstName.getText();
         String strLastName = txtfldLastName.getText();
-        String strMiddleInitial = txtfldMiddleInitial.getText();
+
+        String strMiddleInitial;
+        if(!txtfldMiddleInitial.getText().isBlank()) {
+            strMiddleInitial = txtfldMiddleInitial.getText();
+        }else{
+            strMiddleInitial = null;
+        }
 
         int intAge = 0;
         if(txtfldAge.getText().isEmpty()){
@@ -705,7 +721,7 @@ public class AddExamineeForm extends PScrollPanel{
                         "Input Error",
                         JOptionPane.WARNING_MESSAGE
                 );
-                return null; // or break, depending on your flow
+                return null;
             }
         }else{
             strAddress = null;
@@ -749,43 +765,105 @@ public class AddExamineeForm extends PScrollPanel{
 
         // Medical Condition
         ArrayList<MedicalCondition> arrExamineeConditions = new ArrayList<>();
-        for(int intIndex = 0; intIndex < objMedicalConditions.length; intIndex++){
-            if(objMedicalConditions[intIndex].isValid()){
-                arrExamineeConditions.add(new MedicalCondition(objMedicalConditions[intIndex].getName(), objMedicalConditions[intIndex].getDate(), objMedicalConditions[intIndex].getMaintenance()));
+
+        for (MedicalConditionFields objMedField : objMedicalConditions) {
+            if (objMedField.isValid()) {
+                String dateIdentified = objMedField.getDate(); // Can be null now
+                if (dateIdentified != null) {
+                    try {
+                        LocalDate.parse(dateIdentified); // Validate format YYYY-MM-DD
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Incorrect Date Format for Date Identified (YYYY-MM-DD)",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                        return null;
+                    }
+                }
+
+                arrExamineeConditions.add(new MedicalCondition(
+                        objMedField.getName(),
+                        dateIdentified,
+                        objMedField.getMaintenance()
+                ));
             }
         }
 
         // Immunizations
         // check if date is valid
         ArrayList<Immunization> arrExamineeImmunizations = new ArrayList<>();
-        for(ImmunizationFields objImmField : objImmunizations){
-            if(objImmField.getChkVaccineName().isSelected() && objImmField.isOthers){
-                if(objImmField.getOtherName().isEmpty()){
-                    //Throw an error
+        for (ImmunizationFields objImmField : objImmunizations) {
+            if (objImmField.getChkVaccineName().isSelected() && objImmField.isOthers) {
+                if (objImmField.getOtherName().isEmpty()) {
+                    JOptionPane.showMessageDialog(null,
+                            "Please fill out all vaccine name (others) fields.",
+                            "Input Error",
+                            JOptionPane.WARNING_MESSAGE);
                     return null;
                 }
-                if(objImmField.getDateGiven().isEmpty()){
-                    //Throw an error
+
+                String dateGiven = objImmField.getDateGiven(); // can be null now
+                if (dateGiven != null && !dateGiven.trim().isEmpty()) {
+                    try {
+                        LocalDate.parse(dateGiven.trim()); // Validate format YYYY-MM-DD
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(
+                                null, "Incorrect Date Format for Date Given (YYYY-MM-DD)",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return null;
+                    }
+                } else {
+                    dateGiven = null; // normalize empty strings to null
+                }
+
+                if (objImmField.getDose().isEmpty()) {
+                    JOptionPane.showMessageDialog(null,
+                            "Please fill out the dose field.",
+                            "Input Error",
+                            JOptionPane.WARNING_MESSAGE);
                     return null;
                 }
-                if(objImmField.getDose().isEmpty()){
-                    //Throw an error
-                    return null;
-                }
-                arrExamineeImmunizations.add(new Immunization(objImmField.getTxtfldOthers().getText(), objImmField.getDateGiven(), objImmField.getDose(), objImmField.getRemarks()));
+
+                arrExamineeImmunizations.add(new Immunization(
+                        objImmField.getTxtfldOthers().getText(),
+                        dateGiven,
+                        objImmField.getDose(),
+                        objImmField.getRemarks()));
                 continue;
             }
 
-            if(objImmField.getChkVaccineName().isSelected()){
-                if(objImmField.getDateGiven().isEmpty()){
-                    //Throw an error
+            if (objImmField.getChkVaccineName().isSelected()) {
+                String dateGiven = objImmField.getDateGiven(); // can be null
+                if (dateGiven != null && !dateGiven.trim().isEmpty()) {
+                    try {
+                        LocalDate.parse(dateGiven.trim());
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(
+                                null, "Incorrect Date Format for Date Given (YYYY-MM-DD)",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return null;
+                    }
+                } else {
+                    dateGiven = null;
+                }
+
+                if (objImmField.getDose().isEmpty()) {
+                    JOptionPane.showMessageDialog(null,
+                            "Please fill out the dose field.",
+                            "Input Error",
+                            JOptionPane.WARNING_MESSAGE);
                     return null;
                 }
-                if(objImmField.getDose().isEmpty()){
-                    //Throw an error
-                    return null;
-                }
-                arrExamineeImmunizations.add(new Immunization(objImmField.getChkVaccineName().getText(), objImmField.getDateGiven(), objImmField.getDose(), objImmField.getRemarks()));
+
+                arrExamineeImmunizations.add(new Immunization(
+                        objImmField.getChkVaccineName().getText(),
+                        dateGiven,
+                        objImmField.getDose(),
+                        objImmField.getRemarks()));
             }
         }
 

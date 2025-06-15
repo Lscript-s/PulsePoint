@@ -193,6 +193,10 @@ public class PButton extends JButton {
         this.setFont(this.getFont().deriveFont(fontSize));
     }
 
+    public void setHoverClick(){
+        setBackgroundClickedColor(PulsePointConstants.PINK);
+        setBackgroundHoverColor(PulsePointConstants.BLUE);
+    }
 
     public void setPointCursor(boolean isPointCursor){
         if(isPointCursor){

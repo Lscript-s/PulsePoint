@@ -146,6 +146,17 @@ class Constants{
     };
 
     public static String[] HISTORYILLNESS = {
+            "Hypertension",
+            "Tuberculosis",
+            "B. Asthma",
+            "Cancer-breast, colon",
+            "Diabetes Mellitus",
+            "Hepatitis",
+            "Heart Disease",
+            "Allergies"
+    };
+
+    public static String[] OTHERHISTORYILLNESS = {
             "Huntington's Disease",
             "Cystic Fibrosis",
             "Sickle Cell Anemia",
@@ -451,7 +462,11 @@ class Constants{
             {"Opioid Dependence", new String[]{"Methadone", "Buprenorphine"}}
     };
 
-    public static String[] immunizations = {"Hepatitis A",
+    public static String[] immunizations = {
+            "MMR", "Dtap/Tetanus", "Varicella", "Hepatits B", "Influenza", "Pneumonia"
+    };
+
+    public static String[] othersimmunizations = {"Hepatitis A",
             "Hepatitis B",
             "Influenza (Flu)",
             "Tetanus",
@@ -684,14 +699,18 @@ class ExamineeObj{
         }
     }
 
-    public void generate_immunizations(){
+    public void generate_immunizations() {
         if (rand.nextDouble() <= 0.7) {
             int count = rand.nextInt(6) + 1;  // 1 to 6 immunizations
-            immunization = new String[count];
-            immunization_date = new Date[count];
-            vaccine_remarks = new String[count];
+            boolean addOther = rand.nextDouble() <= 0.5;  // 50% chance to add from otherimmunization
+            int total = count + (addOther ? 1 : 0);
 
-            // Random unique immunization indexes
+            immunization = new String[total];
+            immunization_date = new Date[total];
+            vaccine_remarks = new String[total];
+            dose = new String[total];
+
+            // Pick unique random indexes for regular immunizations
             Set<Integer> chosenIndexes = new HashSet<>();
             while (chosenIndexes.size() < count) {
                 chosenIndexes.add(rand.nextInt(Constants.immunizations.length));
@@ -718,12 +737,36 @@ class ExamineeObj{
                 dose[i] = Constants.dose[rand.nextInt(Constants.dose.length)];
                 i++;
             }
+
+            // Add one from otherimmunization if chosen
+            if (addOther && Constants.othersimmunizations.length > 0) {
+                int otherIdx = rand.nextInt(Constants.othersimmunizations.length);
+                immunization[i] = Constants.othersimmunizations[otherIdx];
+
+                // Generate same format for date, remarks, and dose
+                if (rand.nextDouble() <= 0.8) {
+                    immunization_date[i] = Date.valueOf(generate_date());
+                } else {
+                    immunization_date[i] = null;
+                }
+
+                if (rand.nextDouble() <= 0.3) {
+                    vaccine_remarks[i] = generateString(Constants.vaccine_remarks);
+                } else {
+                    vaccine_remarks[i] = null;
+                }
+
+                dose[i] = Constants.dose[rand.nextInt(Constants.dose.length)];
+            }
+
         } else {
             immunization = new String[0];
             immunization_date = new Date[0];
             vaccine_remarks = new String[0];
+            dose = new String[0];
         }
     }
+
 
     public void printExaminee() {
         System.out.println("Examinee Information:");
@@ -798,14 +841,22 @@ class ExamineeObj{
     }
 
     private String generate_family_history_illness() {
-        int numberOfIllnesses = rand.nextInt(6); // 0 to 5
-        if (numberOfIllnesses == 0) {
+        int numberOfIllnesses = rand.nextInt(8); // 0 to 7 inclusive
+        List<String> selected = new ArrayList<>();
+        if (numberOfIllnesses > 0) {
+            List<String> illnessList = new ArrayList<>(Arrays.asList(Constants.HISTORYILLNESS));
+            Collections.shuffle(illnessList, rand); // Randomize the list
+            selected.addAll(illnessList.subList(0, Math.min(numberOfIllnesses, illnessList.size())));
+        }
+        // 50% chance to include one random illness from OTHERHISTORYILLNESS
+        if (rand.nextBoolean()) {
+            String[] otherIllnesses = Constants.OTHERHISTORYILLNESS;
+            String randomOtherIllness = otherIllnesses[rand.nextInt(otherIllnesses.length)];
+            selected.add(randomOtherIllness);
+        }
+        if (selected.isEmpty()) {
             return null;
         }
-
-        List<String> illnessList = new ArrayList<>(Arrays.asList(Constants.HISTORYILLNESS));
-        Collections.shuffle(illnessList, rand); // Randomize the list
-        List<String> selected = illnessList.subList(0, Math.min(numberOfIllnesses, illnessList.size()));
         return String.join(", ", selected);
     }
 
@@ -934,176 +985,172 @@ public class Prototyping {
             Connection conn = DriverManager.getConnection(url, username, password);
             System.out.println("Success");
 
-            while(true) {
-                ExamineeObj examinee = new ExamineeObj();
-                examinee.printExaminee();
-                if(sc.nextLine().equalsIgnoreCase("abort")){
-                    break;
-                }
+            ExamineeObj examinee = new ExamineeObj();
+            examinee.printExaminee();
 
-                String cols = "examinee_id, year_of_exam, date_of_exam, last_name, first_name, middle_initial, age, sex, birthdate, civil_status, role, mobile_number, network, address_in_miagao, landlord_name, landlord_contact_number, guardian_name, guardian_address, guardian_relation, family_history_illness, division, guardian_network, guardian_mobile_number";
-                String query = "INSERT INTO examinee (" + cols + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                PreparedStatement stmnt = conn.prepareStatement(query);
-                stmnt.setString(1, examinee.id);
-                stmnt.setInt(2, examinee.year_of_exam);
-                stmnt.setDate(3, Date.valueOf(examinee.date_of_exam));
-                stmnt.setString(4, examinee.last_name);
-                stmnt.setString(5, examinee.first_name);
-                // middle_initial can be null, so handle it
-                if (examinee.middle_initial == null) {
-                    stmnt.setNull(6, java.sql.Types.CHAR);
-                } else {
-                    stmnt.setString(6, examinee.middle_initial.toString());
-                }
 
-                stmnt.setInt(7, examinee.age);
+            String cols = "examinee_id, year_of_exam, date_of_exam, last_name, first_name, middle_initial, age, sex, birthdate, civil_status, role, mobile_number, network, address_in_miagao, landlord_name, landlord_contact_number, guardian_name, guardian_address, guardian_relation, family_history_illness, division, guardian_network, guardian_mobile_number";
+            String query = "INSERT INTO examinee (" + cols + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmnt = conn.prepareStatement(query);
+            stmnt.setString(1, examinee.id);
+            stmnt.setInt(2, examinee.year_of_exam);
+            stmnt.setDate(3, Date.valueOf(examinee.date_of_exam));
+            stmnt.setString(4, examinee.last_name);
+            stmnt.setString(5, examinee.first_name);
+            // middle_initial can be null, so handle it
+            if (examinee.middle_initial == null) {
+                stmnt.setNull(6, java.sql.Types.CHAR);
+            } else {
+                stmnt.setString(6, examinee.middle_initial.toString());
+            }
+
+            stmnt.setInt(7, examinee.age);
 
 // sex can be null
-                if (examinee.sex == null) {
-                    stmnt.setNull(8, java.sql.Types.CHAR);
-                } else {
-                    stmnt.setString(8, examinee.sex.toString());
-                }
+            if (examinee.sex == null) {
+                stmnt.setNull(8, java.sql.Types.CHAR);
+            } else {
+                stmnt.setString(8, examinee.sex.toString());
+            }
 
-                stmnt.setDate(9, Date.valueOf(examinee.birthdate));
-                stmnt.setString(10, examinee.civil_status.toString());
+            stmnt.setDate(9, Date.valueOf(examinee.birthdate));
+            stmnt.setString(10, examinee.civil_status.toString());
 
 
-                stmnt.setString(11, examinee.role);
-                stmnt.setString(12, examinee.mobile_number);
-                stmnt.setString(13, examinee.network);
+            stmnt.setString(11, examinee.role);
+            stmnt.setString(12, examinee.mobile_number);
+            stmnt.setString(13, examinee.network);
 
 // For address_in_miagao and others, if null, setNull to VARCHAR
-                if (examinee.address_in_miagao == null) {
-                    stmnt.setNull(14, java.sql.Types.VARCHAR);
-                } else {
-                    stmnt.setString(14, examinee.address_in_miagao);
+            if (examinee.address_in_miagao == null) {
+                stmnt.setNull(14, java.sql.Types.VARCHAR);
+            } else {
+                stmnt.setString(14, examinee.address_in_miagao);
+            }
+
+            if (examinee.landlord_name == null) {
+                stmnt.setNull(15, java.sql.Types.VARCHAR);
+            } else {
+                stmnt.setString(15, examinee.landlord_name);
+            }
+
+            if (examinee.landlord_contact_number == null) {
+                stmnt.setNull(16, java.sql.Types.VARCHAR);
+            } else {
+                stmnt.setString(16, examinee.landlord_contact_number);
+            }
+
+            if (examinee.guardian_name == null) {
+                stmnt.setNull(17, java.sql.Types.VARCHAR);
+            } else {
+                stmnt.setString(17, examinee.guardian_name);
+            }
+
+            if (examinee.guardian_address == null) {
+                stmnt.setNull(18, java.sql.Types.VARCHAR);
+            } else {
+                stmnt.setString(18, examinee.guardian_address);
+            }
+
+            if (examinee.guardian_relation == null) {
+                stmnt.setNull(19, java.sql.Types.VARCHAR);
+            } else {
+                stmnt.setString(19, examinee.guardian_relation);
+            }
+
+            if (examinee.family_history_illness == null) {
+                stmnt.setNull(20, java.sql.Types.VARCHAR);
+            } else {
+                stmnt.setString(20, examinee.family_history_illness);
+            }
+            stmnt.setString(21, examinee.division);
+
+            if (examinee.guardian_network == null) {
+                stmnt.setNull(22, java.sql.Types.VARCHAR);
+            } else {
+                stmnt.setString(22, examinee.guardian_network);
+            }
+
+            if (examinee.guardian_mobile_number == null) {
+                stmnt.setNull(23, java.sql.Types.VARCHAR);
+            } else {
+                stmnt.setString(23, examinee.guardian_mobile_number);
+            }
+
+
+            // Execute the insert
+            int rowsAffected = stmnt.executeUpdate();
+            System.out.println("Inserted rows: " + rowsAffected);
+
+
+            String insertSql = "INSERT INTO current_medical_condition (examinee_id, medical_condition, condition_identified_on, maintenance_medication) VALUES (?,?,?,?)";
+            stmnt = conn.prepareStatement(insertSql);
+            for (int i = 0; i < examinee.medical_conditions.length; i++) {
+                Object[] conditionRow = examinee.medical_conditions[i];
+                if(conditionRow[0] == null){
+                    continue;
                 }
+                stmnt.setString(1, examinee.id);
 
-                if (examinee.landlord_name == null) {
-                    stmnt.setNull(15, java.sql.Types.VARCHAR);
-                } else {
-                    stmnt.setString(15, examinee.landlord_name);
-                }
+                // medical_condition at index 0, cast to String
+                String medicalCondition = (conditionRow[0] != null) ? conditionRow[0].toString() : null;
+                stmnt.setString(2, medicalCondition);
 
-                if (examinee.landlord_contact_number == null) {
-                    stmnt.setNull(16, java.sql.Types.VARCHAR);
-                } else {
-                    stmnt.setString(16, examinee.landlord_contact_number);
-                }
-
-                if (examinee.guardian_name == null) {
-                    stmnt.setNull(17, java.sql.Types.VARCHAR);
-                } else {
-                    stmnt.setString(17, examinee.guardian_name);
-                }
-
-                if (examinee.guardian_address == null) {
-                    stmnt.setNull(18, java.sql.Types.VARCHAR);
-                } else {
-                    stmnt.setString(18, examinee.guardian_address);
-                }
-
-                if (examinee.guardian_relation == null) {
-                    stmnt.setNull(19, java.sql.Types.VARCHAR);
-                } else {
-                    stmnt.setString(19, examinee.guardian_relation);
-                }
-
-                if (examinee.family_history_illness == null) {
-                    stmnt.setNull(20, java.sql.Types.VARCHAR);
-                } else {
-                    stmnt.setString(20, examinee.family_history_illness);
-                }
-                stmnt.setString(21, examinee.division);
-
-                if (examinee.guardian_network == null) {
-                    stmnt.setNull(22, java.sql.Types.VARCHAR);
-                } else {
-                    stmnt.setString(22, examinee.guardian_network);
-                }
-
-                if (examinee.guardian_mobile_number == null) {
-                    stmnt.setNull(23, java.sql.Types.VARCHAR);
-                } else {
-                    stmnt.setString(23, examinee.guardian_mobile_number);
-                }
-
-
-                // Execute the insert
-                int rowsAffected = stmnt.executeUpdate();
-                System.out.println("Inserted rows: " + rowsAffected);
-
-
-                String insertSql = "INSERT INTO current_medical_condition (examinee_id, medical_condition, condition_identified_on, maintenance_medication) VALUES (?,?,?,?)";
-                stmnt = conn.prepareStatement(insertSql);
-                for (int i = 0; i < examinee.medical_conditions.length; i++) {
-                    Object[] conditionRow = examinee.medical_conditions[i];
-                    if(conditionRow[0] == null){
-                        continue;
+                // condition_identified_on at index 2, cast to LocalDate or String and convert to java.sql.Date
+                if (conditionRow[2] != null) {
+                    // assuming conditionRow[2] is a LocalDate or a String formatted yyyy-MM-dd
+                    java.sql.Date sqlDate;
+                    if (conditionRow[2] instanceof java.time.LocalDate) {
+                        sqlDate = java.sql.Date.valueOf((java.time.LocalDate) conditionRow[2]);
+                    } else {
+                        sqlDate = java.sql.Date.valueOf(conditionRow[2].toString());
                     }
-                    stmnt.setString(1, examinee.id);
+                    stmnt.setDate(3, sqlDate);
+                } else {
+                    stmnt.setNull(3, java.sql.Types.DATE);
+                }
 
-                    // medical_condition at index 0, cast to String
-                    String medicalCondition = (conditionRow[0] != null) ? conditionRow[0].toString() : null;
-                    stmnt.setString(2, medicalCondition);
+                // maintenance_medication at index 1
+                if (conditionRow[1] != null && conditionRow[1] instanceof String[]) {
+                    String[] meds = (String[]) conditionRow[1];
+                    String maintenanceMed = String.join(", ", meds); // join into a single string
+                    stmnt.setString(4, maintenanceMed);
+                } else if (conditionRow[1] != null) {
+                    stmnt.setString(4, conditionRow[1].toString());
+                } else {
+                    stmnt.setNull(4, java.sql.Types.VARCHAR);
+                }
 
-                    // condition_identified_on at index 2, cast to LocalDate or String and convert to java.sql.Date
-                    if (conditionRow[2] != null) {
-                        // assuming conditionRow[2] is a LocalDate or a String formatted yyyy-MM-dd
-                        java.sql.Date sqlDate;
-                        if (conditionRow[2] instanceof java.time.LocalDate) {
-                            sqlDate = java.sql.Date.valueOf((java.time.LocalDate) conditionRow[2]);
-                        } else {
-                            sqlDate = java.sql.Date.valueOf(conditionRow[2].toString());
-                        }
-                        stmnt.setDate(3, sqlDate);
+                stmnt.executeUpdate();
+            }
+
+            insertSql = "INSERT INTO immunization_background (examinee_id, vaccine_name, vaccine_given_date, vaccine_dose, vaccine_remarks) VALUES (?,?,?,?,?)";
+            stmnt = conn.prepareStatement(insertSql);
+
+            for (int i = 0; i < examinee.immunization.length; i++) {
+                if (examinee.immunization[i] != null && !examinee.immunization[i].isEmpty()) {
+                    stmnt.setString(1, examinee.id);  // examinee_id
+                    stmnt.setString(2, examinee.immunization[i]);  // vaccine_name
+
+                    if (examinee.immunization_date[i] != null) {
+                        stmnt.setDate(3, examinee.immunization_date[i]);  // vaccine_given_date
                     } else {
                         stmnt.setNull(3, java.sql.Types.DATE);
                     }
 
-                    // maintenance_medication at index 1
-                    if (conditionRow[1] != null && conditionRow[1] instanceof String[]) {
-                        String[] meds = (String[]) conditionRow[1];
-                        String maintenanceMed = String.join(", ", meds); // join into a single string
-                        stmnt.setString(4, maintenanceMed);
-                    } else if (conditionRow[1] != null) {
-                        stmnt.setString(4, conditionRow[1].toString());
+                    if (examinee.dose[i] != null && !examinee.dose[i].isEmpty()) {
+                        stmnt.setString(4, examinee.dose[i]);  // vaccine_dose
                     } else {
                         stmnt.setNull(4, java.sql.Types.VARCHAR);
                     }
 
-                    stmnt.executeUpdate();
-                }
-
-                insertSql = "INSERT INTO immunization_background (examinee_id, vaccine_name, vaccine_given_date, vaccine_dose, vaccine_remarks) VALUES (?,?,?,?,?)";
-                stmnt = conn.prepareStatement(insertSql);
-
-                for (int i = 0; i < examinee.immunization.length; i++) {
-                    if (examinee.immunization[i] != null && !examinee.immunization[i].isEmpty()) {
-                        stmnt.setString(1, examinee.id);  // examinee_id
-                        stmnt.setString(2, examinee.immunization[i]);  // vaccine_name
-
-                        if (examinee.immunization_date[i] != null) {
-                            stmnt.setDate(3, examinee.immunization_date[i]);  // vaccine_given_date
-                        } else {
-                            stmnt.setNull(3, java.sql.Types.DATE);
-                        }
-
-                        if (examinee.dose[i] != null && !examinee.dose[i].isEmpty()) {
-                            stmnt.setString(4, examinee.dose[i]);  // vaccine_dose
-                        } else {
-                            stmnt.setNull(4, java.sql.Types.VARCHAR);
-                        }
-
-                        if (examinee.vaccine_remarks[i] != null && !examinee.vaccine_remarks[i].isEmpty()) {
-                            stmnt.setString(5, examinee.vaccine_remarks[i]);  // vaccine_remarks
-                        } else {
-                            stmnt.setNull(5, java.sql.Types.VARCHAR);
-                        }
-
-                        stmnt.executeUpdate();
+                    if (examinee.vaccine_remarks[i] != null && !examinee.vaccine_remarks[i].isEmpty()) {
+                        stmnt.setString(5, examinee.vaccine_remarks[i]);  // vaccine_remarks
+                    } else {
+                        stmnt.setNull(5, java.sql.Types.VARCHAR);
                     }
+
+                    stmnt.executeUpdate();
                 }
             }
 
@@ -1113,7 +1160,27 @@ public class Prototyping {
     }
 
     public static void main(String[] args) {
-        new Prototyping();
+        Scanner sc = new Scanner(System.in);
+
+        if(sc.nextLine().equalsIgnoreCase("auto")){
+            while(true) {
+                if (sc.nextLine().equalsIgnoreCase("abort")) {
+                    break;
+                }
+                int num = sc.nextInt();
+                for (int i = 0; i < num; i++) {
+                    new Prototyping();
+                }
+                System.out.println("Done");
+            }
+        }
+
+        while(true) {
+            if (sc.nextLine().equalsIgnoreCase("abort")) {
+                break;
+            }
+            new Prototyping();
+        }
     }
 
 }

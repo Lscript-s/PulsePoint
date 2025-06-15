@@ -56,9 +56,52 @@ public class ExamineeInformationBuilder {
         }
     }
 
+    private PPanel buildIllnessGroupPanel(String heading, String illnessText) {
+        PPanel pnlGroup = new PPanel(new GridBagLayout());
+        pnlGroup.setBackground(PulsePointConstants.WHITE);
+        pnlGroup.setBorderColor(PulsePointConstants.BLUE);
+        pnlGroup.setPadding(5, 10, 5, 10);
+
+        PGridBagConstraints gbc = new PGridBagConstraints();
+        gbc.setConstraints(0, 0, 1, 0, 1);
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Heading label
+        PLabel lblHeading = new PLabel(heading, PLabel.HEADING2);
+        pnlGroup.add(lblHeading, gbc);
+        gbc.gridy++;
+
+        // Label and TextArea in one row
+        PPanel pnlRow = new PPanel(new GridBagLayout());
+        PGridBagConstraints innerGbc = new PGridBagConstraints();
+        pnlRow.setBackground(PulsePointConstants.WHITE);
+
+        innerGbc.setConstraints(-1,-1,1,1,1);
+        PLabel lblField = new PLabel("Illness: ", true);
+        lblField.setVerticalTextPosition(PLabel.NORTH);
+        JTextArea txtIllness = new JTextArea(illnessText);
+        txtIllness.setLineWrap(true);
+        txtIllness.setWrapStyleWord(true);
+        txtIllness.setEditable(false);
+        txtIllness.setOpaque(false);
+        txtIllness.setBorder(null);
+        txtIllness.setFont(lblField.getFont().deriveFont(Font.PLAIN)); // Match font with labels
+        txtIllness.setColumns(40); // adjust width
+        txtIllness.setRows(1);     // adjust height
+        txtIllness.setFocusable(false);
+
+        pnlRow.add(lblField,innerGbc);
+        pnlRow.add(txtIllness,innerGbc);
+
+        pnlGroup.add(pnlRow, gbc);
+
+        return pnlGroup;
+    }
 
     private PPanel buildGroupPanel(String heading, Map<String, String> fields) {
         PPanel pnlGroup = new PPanel(new GridBagLayout());
+        pnlGroup.setBackground(PulsePointConstants.WHITE);
         pnlGroup.setBorderColor(PulsePointConstants.BLUE);
         pnlGroup.setPadding(5, 10, 5, 10);
 
@@ -74,7 +117,7 @@ public class ExamineeInformationBuilder {
         for (Map.Entry<String, String> entry : fields.entrySet()) {
             // Create horizontal subpanel for label and value side-by-side
             PPanel pnlRow = new PPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-
+            pnlRow.setBackground(PulsePointConstants.WHITE);
             PLabel lblField = new PLabel(entry.getKey() + ":", true);
             PLabel lblValue = new PLabel(entry.getValue());
 
@@ -90,6 +133,7 @@ public class ExamineeInformationBuilder {
 
     public PPanel buildExamineeInfoPanel() {
         PPanel pnlExamineeInfo = new PPanel();
+        pnlExamineeInfo.setBackground(PulsePointConstants.WHITE);
         pnlExamineeInfo.setLayout(new BoxLayout(pnlExamineeInfo, BoxLayout.Y_AXIS));
         pnlExamineeInfo.setPadding(5, 5, 5, 5);
 
@@ -125,7 +169,7 @@ public class ExamineeInformationBuilder {
         guardianFields.put("Network", safeStr.apply(objExaminee.getStrGuardianNetwork()));
 
         Map<String, String> familyIllnessFields = new LinkedHashMap<>();
-        familyIllnessFields.put("Illness", safeStr.apply(objExaminee.getStrFamilyIllness()));
+        familyIllnessFields.put("Illness", safeStr.apply(objExaminee.getFormattedStrFamilyIllness(20)));
 
         pnlExamineeInfo.add(buildGroupPanel("Basic Information", basicFields));
         pnlExamineeInfo.add(Box.createVerticalStrut(10));
@@ -133,14 +177,15 @@ public class ExamineeInformationBuilder {
         pnlExamineeInfo.add(Box.createVerticalStrut(10));
         pnlExamineeInfo.add(buildGroupPanel("Guardian Information", guardianFields));
         pnlExamineeInfo.add(Box.createVerticalStrut(10));
-        pnlExamineeInfo.add(buildGroupPanel("Family Illness", familyIllnessFields));
-
+        pnlExamineeInfo.add(buildIllnessGroupPanel("Family Illness", safeStr.apply(objExaminee.getStrFamilyIllness())));
+        pnlExamineeInfo.setBackground(PulsePointConstants.WHITE);
         return pnlExamineeInfo;
     }
 
     private PPanel buildSingleImmunizationPanel(Immunization immun) {
         PGridBagConstraints objGbcInner = new PGridBagConstraints();
         PPanel pnlRecord = new PPanel(new GridBagLayout());
+        pnlRecord.setBackground(PulsePointConstants.WHITE);
         pnlRecord.setBorderColor(PulsePointConstants.BLUE);
         pnlRecord.setBorderThickness(2);
         pnlRecord.setPadding(new Insets(5, 5, 5, 5));
@@ -181,6 +226,7 @@ public class ExamineeInformationBuilder {
     public PPanel buildMedicalConditionPanel() {
         PGridBagConstraints objGbc = new PGridBagConstraints();
         PPanel pnlMedicalCondition = new PPanel(new GridBagLayout());
+        pnlMedicalCondition.setBackground(PulsePointConstants.WHITE);
         pnlMedicalCondition.setPadding(5, 5, 5, 5);
         pnlMedicalCondition.setBorderColor(PulsePointConstants.GRAY);
 
@@ -201,6 +247,7 @@ public class ExamineeInformationBuilder {
         } else {
             for (MedicalCondition objConditon : objExaminee.getArrMedicalConditions()) {
                 PPanel pnlCondition = new PPanel(new GridBagLayout());
+                pnlCondition.setBackground(PulsePointConstants.WHITE);
                 pnlCondition.setBorderColor(PulsePointConstants.BLUE);
                 pnlCondition.setBorderThickness(2);
                 pnlCondition.setPadding(new Insets(5, 5, 5, 5));
@@ -249,6 +296,7 @@ public class ExamineeInformationBuilder {
     public PPanel buildImmunizationPanel() {
         PGridBagConstraints gbc = new PGridBagConstraints();
         PPanel pnlImmunization = new PPanel(new GridBagLayout());
+        pnlImmunization.setBackground(PulsePointConstants.WHITE);
         pnlImmunization.setPadding(5, 5, 5, 5);
         pnlImmunization.setBorderColor(PulsePointConstants.GRAY);
 
@@ -320,6 +368,8 @@ public class ExamineeInformationBuilder {
 
         return pnlImmunization;
     }
+
+
 
     public static void main(String[] args) {
         JFrame frm = new JFrame();
