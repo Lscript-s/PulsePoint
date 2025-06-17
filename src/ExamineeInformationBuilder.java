@@ -30,8 +30,11 @@ public class ExamineeInformationBuilder {
                     "SELECT * FROM examinee" +
                     " WHERE examinee_id = (?)");
             stmnt.setString(1,strId);
-            objExamineeInfo = stmnt.executeQuery();
 
+            objExamineeInfo = stmnt.executeQuery();
+            if(objExamineeInfo == null){
+                throw new Exception();
+            }
 
             stmnt = conn.prepareStatement("SELECT * FROM current_medical_condition WHERE examinee_id = (?)");
             stmnt.setString(1, strId);
@@ -145,6 +148,8 @@ public class ExamineeInformationBuilder {
         }
 
         Map<String, String> basicFields = new LinkedHashMap<>();
+        basicFields.put("Date of Exam", safeStr.apply(String.valueOf(objExaminee.getObjExamDate())));
+        basicFields.put("Year of Exam", safeStr.apply(String.valueOf(objExaminee.getIntExamYear())));
         basicFields.put("ID Number", safeStr.apply(objExaminee.getStrId()));
         basicFields.put("Name", safeStr.apply(objExaminee.getFullName()));
         basicFields.put("Role", safeStr.apply(objExaminee.getStrRole()));

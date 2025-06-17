@@ -93,7 +93,6 @@ public class UpdateInformation extends PScrollPanel {
     public UpdateInformation(Examinee examinee) {
         this.objExaminee = examinee;
         getScrollPane().getVerticalScrollBar().setValue(0);
-        System.out.println(examinee.getStrId());
         setBackground(PulsePointConstants.WHITE);
         setPadding(new Insets(10, 10, 10, 10));
 

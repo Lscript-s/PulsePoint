@@ -19,6 +19,7 @@ public class MainWindow {
     Sidebar sidebar = new Sidebar();
     AddExamineeForm addExamineeForm = new AddExamineeForm();
     ExamineeCatalog catalog = new ExamineeCatalog();
+    AboutUs aboutUs = new AboutUs();
     MainWindow(){
         initializeFrame();
 
@@ -190,7 +191,10 @@ public class MainWindow {
     }
 
     private void addAboutUs(){
-        pnlBody.add(new PLabel("About Us", PLabel.HEADING1));
+        gbcCons.reset();
+        gbcCons.setConstraints(-1,-1,1,1,1);
+        pnlBody.add(aboutUs.getScrollPane(), gbcCons);
+        gbcCons.reset();
     }
 
     // Sets the body panel and changes the appearance of the button

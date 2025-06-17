@@ -65,6 +65,10 @@ public class PLabel extends JLabel {
         super(img);
     }
 
+    PLabel(ImageIcon img, int width, int height) {
+        super(new ImageIcon(img.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH)));
+    }
+
     public void setBold(boolean isBold){
         if(isBold){
             this.setFont(this.getFont().deriveFont(Font.BOLD));
