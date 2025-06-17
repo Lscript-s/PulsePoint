@@ -2,9 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Header extends PPanel {
-    private PLabel lblLogo = new PLabel(new ImageIcon("src/icons/Title.png"));
+    private PLabel lblLogo = new PLabel(new ImageIcon(getClass().getResource("icons/Title.png")));
     private PTextField txtfldSearch = new PTextField(10);
-    private PButton btnSearch = new PButton(new ImageIcon("src/icons/Icon_Search.png"));
+    private PButton btnSearch = new PButton(new ImageIcon(getClass().getResource("icons/Icon_Search.png")));
     private PGridBagConstraints gbcCon = new PGridBagConstraints();
     private final Color clrPink = Color.decode("#d7c8c8");
     private final Color clrBlue = Color.decode("#0cc0df");

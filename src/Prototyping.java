@@ -1162,11 +1162,15 @@ public class Prototyping {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
+        System.out.print("type auto for automatic mode, type anything for manual mode: ");
         if(sc.nextLine().equalsIgnoreCase("auto")){
             while(true) {
+                System.out.print("type abort to exit, enter to populate the database: ");
                 if (sc.nextLine().equalsIgnoreCase("abort")) {
                     break;
                 }
+
+                System.out.print("Enter number of data to populate the database: ");
                 int num = sc.nextInt();
                 for (int i = 0; i < num; i++) {
                     new Prototyping();
@@ -1176,6 +1180,7 @@ public class Prototyping {
         }
 
         while(true) {
+            System.out.print("type abort to exit, enter to populate the database: ");
             if (sc.nextLine().equalsIgnoreCase("abort")) {
                 break;
             }

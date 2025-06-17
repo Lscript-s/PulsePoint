@@ -41,14 +41,14 @@ public class AboutUs extends PScrollPanel{
 
         append(createRowPanel(
                 new PPanel[]{
-                        createMemberPanel(new ImageIcon("src/images/Abasola.jpg"), "Abasola, Knurl Randel B."),
-                        createMemberPanel(new ImageIcon("src/images/Aranas.jpg"), "Aranas, Micah Joy D."),
-                        createMemberPanel(new ImageIcon("src/images/Gultiano.jpg"), "Gultiano, Lancelot A.")}
+                        createMemberPanel(new ImageIcon(getClass().getResource("images/Abasola.jpg")), "Abasola, Knurl Randel B."),
+                        createMemberPanel(new ImageIcon(getClass().getResource("images/Aranas.jpg")), "Aranas, Micah Joy D."),
+                        createMemberPanel(new ImageIcon(getClass().getResource("images/Gultiano.jpg")), "Gultiano, Lancelot A.")}
                 ));
         append(createRowPanel(
                 new PPanel[]{
-                        createMemberPanel(new ImageIcon("src/images/Morante.jpg"), "Morante, C J Heart L."),
-                        createMemberPanel(new ImageIcon("src/images/Pinga.jpg"), "Piñga, Andrei Joaquin V.")}
+                        createMemberPanel(new ImageIcon(getClass().getResource("images/Morante.jpg")), "Morante, C J Heart L."),
+                        createMemberPanel(new ImageIcon(getClass().getResource("images/Pinga.jpg")), "Piñga, Andrei Joaquin V.")}
                 ));
 
 

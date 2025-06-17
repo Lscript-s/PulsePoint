@@ -914,7 +914,7 @@ public class UpdateInformation extends PScrollPanel {
         medicalConditions.add(new MedicalCondition("Hypertension", "2018-11-20", "Medication"));
 
         ArrayList<Immunization> immunizations = new ArrayList<>();
-        immunizations.add(new Immunization("MMR", "2010-06-01", "1st Dose", "No reactions"));
+        immunizations.add(new Immunization("Hepatitis B", "2010-06-01", "1st Dose", "No reactions"));
         immunizations.add(new Immunization("Tetanus", "2023-03-12", "Booster", "Mild soreness"));
 
         Examinee examinee = new Examinee(

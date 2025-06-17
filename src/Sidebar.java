@@ -3,13 +3,13 @@ import java.awt.*;
 
 public class Sidebar extends PPanel{
     private final PButton btnDashboard = new PButton("Dashboard",
-            new ImageIcon("src/icons/Icon_Dashboard.png"), 24,24);
+            new ImageIcon(getClass().getResource("icons/Icon_Dashboard.png")), 24,24);
     private final PButton btnExamineeCatalog = new PButton("Examinee Catalog",
-            new ImageIcon("src/icons/Icon_Catalog.png"), 24,24);
+            new ImageIcon(getClass().getResource("icons/Icon_Catalog.png")), 24,24);
     private final PButton btnAddExaminee = new PButton("Add Examinee",
-            new ImageIcon("src/icons/Icon_Add.png"), 24,24);
+            new ImageIcon(getClass().getResource("icons/Icon_Add.png")), 24,24);
     private final PButton btnAboutUs = new PButton("About Us",
-            new ImageIcon("src/icons/Icon_AboutUs.png"), 24,24);
+            new ImageIcon(getClass().getResource("icons/Icon_AboutUs.png")), 24,24);
     private final PPanel pnlDashboard = new PPanel(new GridBagLayout());
     private final PPanel pnlExamineeCatalog = new PPanel(new GridBagLayout());
     private final PPanel pnlAddExaminee = new PPanel(new GridBagLayout());
