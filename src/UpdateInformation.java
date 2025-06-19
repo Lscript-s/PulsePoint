@@ -63,7 +63,7 @@ public class UpdateInformation extends PScrollPanel {
     private final PCheckBox chkHypertension = new PCheckBox("Hypertension");
     private final PCheckBox chkTuberculosis = new PCheckBox("Tuberculosis");
     private final PCheckBox chkBAsthma = new PCheckBox("B. Asthma");
-    private final PCheckBox chkCancer = new PCheckBox("Cancer-breast, colon");
+    private final PCheckBox chkCancer = new PCheckBox("Cancer-breast or colon");
     private final PCheckBox chkDiabetes = new PCheckBox("Diabetes Mellitus");
     private final PCheckBox chkHepatitis = new PCheckBox("Hepatitis");
     private final PCheckBox chkHeartDisease = new PCheckBox("Heart Disease");
@@ -234,7 +234,7 @@ public class UpdateInformation extends PScrollPanel {
                 case "Hypertension" -> chkHypertension.setSelected(true);
                 case "Tuberculosis" -> chkTuberculosis.setSelected(true);
                 case "B. Asthma" -> chkBAsthma.setSelected(true);
-                case "Cancer-breast, colon" -> chkCancer.setSelected(true);
+                case "Cancer-breast or colon" -> chkCancer.setSelected(true);
                 case "Diabetes Mellitus" -> chkDiabetes.setSelected(true);
                 case "Hepatitis" -> chkHepatitis.setSelected(true);
                 case "Heart Disease" -> chkHeartDisease.setSelected(true);
@@ -881,7 +881,7 @@ public class UpdateInformation extends PScrollPanel {
         String strHepatitis = chkHepatitis.isSelected() ? "Hepatitis" : null;
         String strAsthma = chkBAsthma.isSelected() ? "B. Asthma" : null;
         String strHeartDisease = chkHeartDisease.isSelected() ? "Heart Disease" : null;
-        String strCancer = chkCancer.isSelected() ? "Cancer-breast, colon" : null;
+        String strCancer = chkCancer.isSelected() ? "Cancer-breast or colon" : null;
         String strAllergies = chkAllergies.isSelected() ? "Allergies" : null;
         String strOthers = chkOthers.isSelected() ? txtfldFamilyIllnessOthers.getText() : null;
         String[] strarrFamilyIllness = Stream.of(

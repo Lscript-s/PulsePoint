@@ -149,7 +149,7 @@ class Constants{
             "Hypertension",
             "Tuberculosis",
             "B. Asthma",
-            "Cancer-breast, colon",
+            "Cancer-breast or colon",
             "Diabetes Mellitus",
             "Hepatitis",
             "Heart Disease",

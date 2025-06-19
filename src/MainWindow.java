@@ -22,7 +22,7 @@ public class MainWindow {
     AboutUs aboutUs = new AboutUs();
     MainWindow(){
         initializeFrame();
-
+        frmMainWindow.setIconImage(new ImageIcon(getClass().getResource("/icons/Logo.png")).getImage());
         pnlHeader.setBackground(Color.RED);
         pnlHeader.setOpaque(true);
 

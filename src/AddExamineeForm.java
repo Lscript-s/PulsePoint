@@ -151,11 +151,11 @@ public class AddExamineeForm extends PScrollPanel{
     private final PTextField txtfldGuardianRelation = new PTextField("Relation w/ guardian", 30, PulsePointConstants.GRAY);
     private final PTextField txtfldGuardianAddress = new PTextField("Guardian's Address", 30, PulsePointConstants.GRAY);
 
-    // Checkboxes with Hypertension, Tubercolosis, B.Asthma, Cancer-breast, colon, diabetes mellitus, hepatitis, heart disease, allergies
+    // Checkboxes with Hypertension, Tubercolosis, B.Asthma, Cancer-breast or colon, diabetes mellitus, hepatitis, heart disease, allergies
     private final PCheckBox chkHypertension = new PCheckBox("Hypertension");
     private final PCheckBox chkTuberculosis = new PCheckBox("Tuberculosis");
     private final PCheckBox chkBAsthma = new PCheckBox("B. Asthma");
-    private final PCheckBox chkCancer = new PCheckBox("Cancer-breast, colon");
+    private final PCheckBox chkCancer = new PCheckBox("Cancer-breast or colon");
     private final PCheckBox chkDiabetes = new PCheckBox("Diabetes Mellitus");
     private final PCheckBox chkHepatitis = new PCheckBox("Hepatitis");
     private final PCheckBox chkHeartDisease = new PCheckBox("Heart Disease");
@@ -889,7 +889,7 @@ public class AddExamineeForm extends PScrollPanel{
         String strHepatitis = chkHepatitis.isSelected() ? "Hepatitis" : null;
         String strAsthma = chkBAsthma.isSelected() ? "B. Asthma" : null;
         String strHeartDisease = chkHeartDisease.isSelected() ? "Heart Disease" : null;
-        String strCancer = chkCancer.isSelected() ? "Cancer-breast, colon" : null;
+        String strCancer = chkCancer.isSelected() ? "Cancer-breast or colon" : null;
         String strAllergies = chkAllergies.isSelected() ? "Allergies" : null;
         String strOthers = chkOthers.isSelected() ? txtfldFamilyIllnessOthers.getText() : null;
         String[] strarrFamilyIllness = Stream.of(
