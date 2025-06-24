@@ -2,8 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainWindow {
     JFrame frmMainWindow = new JFrame("PulsePoint");
@@ -223,5 +221,4 @@ public class MainWindow {
     public static void main(String[] args) {
         new MainWindow();
     }
-
 }

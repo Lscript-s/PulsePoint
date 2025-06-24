@@ -649,16 +649,37 @@ public class AddExamineeForm extends PScrollPanel{
         }
 
         int intAge = 0;
-        if(txtfldAge.getText().isEmpty()){
+        try {
+            String input = txtfldAge.getText().trim();
+            if (input.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Age field cannot be empty.",
+                        "Input Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return null;
+            }
+
+            intAge = Integer.parseInt(input);
+            if (intAge < 0) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Age must be a positive number.",
+                        "Input Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return null;
+            }
+
+        } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(
                     null,
-                    "Age field cannot be empty.",
+                    "Please enter a valid number for age.",
                     "Input Error",
                     JOptionPane.ERROR_MESSAGE
             );
             return null;
-        }else{
-            intAge = Integer.parseInt(txtfldAge.getText());
         }
 
         String strSex = rdMale.isSelected() ? "M" :
